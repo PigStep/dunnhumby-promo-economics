@@ -601,7 +601,7 @@ def chart_reach(fe: dict) -> str:
 
 
 def chart_cost(cost: dict) -> str:
-    fig, ax = plt.subplots(figsize=(7.4, 4.1))
+    fig, ax = plt.subplots(figsize=(7.4, 3.9))
     order = ["BAG SNACKS", "COLD CEREAL", "ORAL HYGIENE PRODUCTS", "FROZEN PIZZA"]
     pretty = {
         "BAG SNACKS": "Bag snacks",
@@ -610,25 +610,17 @@ def chart_cost(cost: dict) -> str:
         "FROZEN PIZZA": "Frozen pizza",
     }
     rows = [(pretty[k], cost["categories"][k]) for k in order]
-    rows.append(("All categories", {
-        "point": cost["overall"][0], "lo": cost["overall"][1],
-        "hi": cost["overall"][2],
-    }))
     y = np.arange(len(rows))[::-1]
 
     for yi, (label, d) in zip(y, rows):
-        is_total = label == "All categories"
-        color = INK if is_total else ACCENT
         ax.errorbar(d["point"], yi, xerr=[[d["point"] - d["lo"]], [d["hi"] - d["point"]]],
-                    fmt="D" if is_total else "o", color=color, ecolor=color,
-                    capsize=3, ms=8 if is_total else 7, lw=1.2, zorder=3)
+                    fmt="o", color=ACCENT, ecolor=ACCENT,
+                    capsize=3, ms=7, lw=1.2, zorder=3)
         ax.text(d["hi"] + 0.07, yi, f"${d['point']:.2f}", va="center",
-                fontsize=11.5, fontweight="bold", color=color)
-    ax.axhline(0.5, color=RULE, lw=0.9)
-    ax.axvline(cost["overall"][0], color=RULE, lw=0.9, ls=":")
+                fontsize=11.5, fontweight="bold", color=ACCENT)
     ax.set_yticks(y, [label for label, _ in rows])
     ax.set_xlim(0, 3.45)
-    ax.set_xlabel("discount per incremental buying household ($)")
+    ax.set_xlabel("discount per extra household-week ($)")
     finish(ax, grid_axis="x")
     ax.tick_params(axis="y", labelsize=10)
     return svg_of(fig, "cost")
@@ -663,6 +655,24 @@ def chart_mechanism(mech: dict) -> str:
     finish(ax, grid_axis="x")
     ax.tick_params(axis="y", labelsize=10)
     return svg_of(fig, "mechanism")
+
+
+def chart_unit_spend(promo: dict) -> str:
+    fig, ax = plt.subplots(figsize=(7.0, 3.6))
+    labels = ["Units", "Spend"]
+    vals = [promo["unit_ratio"], promo["spend_ratio"]]
+    bars = ax.bar(labels, vals, width=0.42, color=[ACCENT, FAINT], zorder=2)
+    ax.axhline(1, color=INK, lw=1, ls=(0, (3, 3)))
+    ax.text(1.45, 1.03, "no change", fontsize=8.2, color=MUTED, ha="right", va="bottom")
+    for bar, v in zip(bars, vals):
+        ax.text(bar.get_x() + bar.get_width() / 2, v + 0.025, f"{v:.2f}×",
+                ha="center", va="bottom", fontsize=15, fontweight="bold", color=INK)
+    ax.set_ylim(0, 2.0)
+    ax.set_ylabel("promo week vs own non-promo weeks (×)")
+    ax.set_xlabel("median across paired product–store cells")
+    finish(ax, grid_axis="y")
+    ax.tick_params(axis="x", labelsize=10)
+    return svg_of(fig, "unit_spend")
 
 
 def chart_payback(payback: dict) -> str:
@@ -727,6 +737,7 @@ def build() -> None:
         "FIG_REACH": chart_reach(a["hh"]["fe"]),
         "FIG_COST": chart_cost(a["cost"]),
         "FIG_MECH": chart_mechanism(a["hh"]["mech"]),
+        "FIG_UNIT_SPEND": chart_unit_spend(a["promo"]),
         "FIG_PAYBACK": chart_payback(a["payback"]),
     }
 
@@ -751,6 +762,7 @@ def build() -> None:
         "PROMO_DEPTH": pct(promo["median_depth"], 2),
         "PROMO_UNIT_RATIO": f"{promo['unit_ratio']:.2f}",
         "PROMO_SPEND_RATIO": f"{promo['spend_ratio']:.2f}",
+        "PROMO_CELLS": f"{promo['cells']:,}",
         "SPEND_GROWTH": pct(trend["SPEND"]["per_year"], 2, True),
         "SPEND_GROWTH_PLAIN": pct(trend["SPEND"]["per_year"], 2),
         "UNITS_GROWTH": pct(trend["UNITS"]["per_year"], 2, True),
@@ -780,6 +792,8 @@ def build() -> None:
         "DEPTH_LO": pct(hh["fe"]["depth"]["lo"], 1),
         "DEPTH_HI": pct(hh["fe"]["depth"]["hi"], 1),
         "REACH_SHARE": pct(cost["reach_share"], 1),
+        "REACH_PAIRED": pct(hh["d_hhs"], 1, True),
+        "ONE_UNIT_SHARE": pct(hh["one_unit_share"], 1),
         "HH_R2": pct(hh["r2"], 1),
         "HH_CELLS": f"{hh['cells']:,}",
         "COST": money(cost["overall"][0]),
@@ -793,6 +807,7 @@ def build() -> None:
         "COST_CEREAL": money(cost["categories"]["COLD CEREAL"]["point"]),
         "COST_ORAL": money(cost["categories"]["ORAL HYGIENE PRODUCTS"]["point"]),
         "COST_PIZZA": money(cost["categories"]["FROZEN PIZZA"]["point"]),
+        "COST_RATIO": f"{cost['categories']['FROZEN PIZZA']['point'] / cost['categories']['BAG SNACKS']['point']:.1f}×",
         "COST_BAG_LO": money(cost["categories"]["BAG SNACKS"]["lo"]),
         "COST_BAG_HI": money(cost["categories"]["BAG SNACKS"]["hi"]),
         "COST_CEREAL_LO": money(cost["categories"]["COLD CEREAL"]["lo"]),
@@ -806,12 +821,15 @@ def build() -> None:
         "MECH_FD_LO": pct(hh["mech"]["feature+display"]["reach_lo"], 0),
         "MECH_FD_HI": pct(hh["mech"]["feature+display"]["reach_hi"], 0),
         "MECH_F": pct(hh["mech"]["feature only"]["reach"], 0, True),
+        "MECH_F_PLAIN": pct(hh["mech"]["feature only"]["reach"], 0),
         "MECH_D": pct(hh["mech"]["display only"]["reach"], 0, True),
+        "MECH_D_PLAIN": pct(hh["mech"]["display only"]["reach"], 0),
         "MECH_TPR": pct(hh["mech"]["TPR only"]["reach"], 0, True),
         "MECH_TPR_PLAIN": pct(hh["mech"]["TPR only"]["reach"], 0),
         "MECH_TPR_LO": pct(hh["mech"]["TPR only"]["reach_lo"], 0),
         "MECH_TPR_HI": pct(hh["mech"]["TPR only"]["reach_hi"], 0),
         "MECH_TPR_ROWS": f"{hh['mech']['TPR only']['rows']:,}",
+        "MECH_WORST_RATIO": f"{hh['mech']['feature+display']['reach_lo'] / hh['mech']['TPR only']['reach_hi']:.0f}×",
         "MECH_DEPTH_MIN": pct(min(v["depth"] for v in hh["mech"].values()), 1, True),
         "MECH_DEPTH_MAX": pct(max(v["depth"] for v in hh["mech"].values()), 1, True),
         "PB_MEDIAN": f"{pb['median_rule'][0]:.2f}",
