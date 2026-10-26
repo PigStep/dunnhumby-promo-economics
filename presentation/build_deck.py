@@ -11,7 +11,10 @@ Run from the repository root or from this directory:
     uv run python presentation/build_deck.py
 
 Outputs `presentation/index.html` with the SVG charts embedded, so the deck is one
-portable file. Set DECK_PREVIEW=1 to also write PNG previews to /tmp/opencode.
+portable file. The page carries both the English deck (template.html) and the Russian
+mirror (template.ru.html); the in-page EN/RU switch flips between them, and each deck
+gets its own charts with localized labels. Set DECK_PREVIEW=1 to also write PNG
+previews to /tmp/opencode.
 """
 from __future__ import annotations
 
@@ -33,6 +36,7 @@ ROOT = Path(__file__).resolve().parent.parent
 HERE = Path(__file__).resolve().parent
 DATA = ROOT / "data" / "dunnhumby - Breakfast at the Frat.xlsx"
 TEMPLATE = HERE / "template.html"
+TEMPLATE_RU = HERE / "template.ru.html"
 OUT = HERE / "index.html"
 PREVIEW = Path("/tmp/opencode/deck_preview")
 
@@ -48,6 +52,124 @@ ACCENT_LIGHT = "#8fb8aa"
 CLAY = "#9f4a3d"
 AMBER = "#a97722"
 BLUE = "#486b80"
+
+# Chart copy per language. Charts are baked to SVG paths, so a language switch
+# cannot restyle them after the fact: build_deck renders each chart twice.
+CHART_TEXT = {
+    "en": {
+        "trend": {
+            "units": "Units · 13-week avg",
+            "spend": "Spend · 13-week avg",
+            "fit": "Spend trend",
+            "ylabel": "index · first week = 100",
+        },
+        "season": {
+            "units": "Units",
+            "spend": "Spend",
+            "xlabel": "week of year",
+            "ylabel": "% vs fitted trend",
+            "peak": "peak",
+            "trough": "trough",
+            "months": ["Jan", "Apr", "Jul", "Oct", "Dec"],
+        },
+        "reach": {
+            "labels": ["Reach\nbuying households", "Depth\nunits per household"],
+            "xlabel": "lift vs own non-promo weeks (%) · cell + week fixed effects",
+        },
+        "cost": {
+            "names": {
+                "BAG SNACKS": "Bag snacks",
+                "COLD CEREAL": "Cold cereal",
+                "ORAL HYGIENE PRODUCTS": "Oral hygiene",
+                "FROZEN PIZZA": "Frozen pizza",
+            },
+            "xlabel": "discount per extra household-week ($)",
+        },
+        "mechanism": {
+            "names": {
+                "feature+display": "Feature + display",
+                "feature only": "Feature only",
+                "display only": "Display only",
+                "TPR only": "Price cut only",
+            },
+            "xlabel": "reach lift vs own non-promo weeks (%) · cell + week fixed effects",
+        },
+        "unit_spend": {
+            "labels": ["Units", "Spend"],
+            "unchanged": "no change",
+            "ylabel": "promo week vs own non-promo weeks (×)",
+            "xlabel": "median across paired product–store cells",
+        },
+        "payback": {
+            "rows": ["Observed promo spend", "Per-cell median", "Median lift × mean baseline"],
+            "even": "break-even",
+            "xlabel": "incremental revenue per $1 of discount · not profit (no cost field)",
+        },
+    },
+    "ru": {
+        "trend": {
+            "units": "Штуки · среднее за 13 недель",
+            "spend": "Выручка · среднее за 13 недель",
+            "fit": "Тренд выручки",
+            "ylabel": "индекс · первая неделя = 100",
+        },
+        "season": {
+            "units": "Штуки",
+            "spend": "Выручка",
+            "xlabel": "неделя года",
+            "ylabel": "% к тренду",
+            "peak": "пик",
+            "trough": "провал",
+            "months": ["янв", "апр", "июл", "окт", "дек"],
+        },
+        "reach": {
+            "labels": ["Охват\nкупившие домохозяйства", "Глубина\nштук на домохозяйство"],
+            "xlabel": "прирост к своим неакционным неделям (%) · фикс. эффекты ячейки и недели",
+        },
+        "cost": {
+            "names": {
+                "BAG SNACKS": "Снеки в пакетах",
+                "COLD CEREAL": "Сухие завтраки",
+                "ORAL HYGIENE PRODUCTS": "Гигиена полости рта",
+                "FROZEN PIZZA": "Замороженная пицца",
+            },
+            "xlabel": "скидка на дополнительное домохозяйство-неделю ($)",
+        },
+        "mechanism": {
+            "names": {
+                "feature+display": "Листовка + выкладка",
+                "feature only": "Только листовка",
+                "display only": "Только выкладка",
+                "TPR only": "Только скидка",
+            },
+            "xlabel": "прирост охвата к своим неакционным неделям (%) · фикс. эффекты ячейки и недели",
+        },
+        "unit_spend": {
+            "labels": ["Штуки", "Выручка"],
+            "unchanged": "без изменений",
+            "ylabel": "акционная неделя к своим неакционным (×)",
+            "xlabel": "медиана по парным ячейкам «товар–магазин»",
+        },
+        "payback": {
+            "rows": ["Выручка в промо", "Медиана по ячейкам", "Прирост × средняя база"],
+            "even": "безубыточность",
+            "xlabel": "дополнительная выручка на $1 скидки · не прибыль (нет поля затрат)",
+        },
+    },
+}
+
+RU_MONTHS = ("янв", "фев", "мар", "апр", "мая", "июн",
+             "июл", "авг", "сен", "окт", "ноя", "дек")
+
+
+def ru_plural(n: int, one: str, few: str, many: str) -> str:
+    """Pick the Russian noun form for a count (1 категория, 2 категории, 5 категорий)."""
+    n = abs(int(n))
+    if n % 10 == 1 and n % 100 != 11:
+        return one
+    if 2 <= n % 10 <= 4 and not 12 <= n % 100 <= 14:
+        return few
+    return many
 
 plt.rcParams.update({
     "font.family": "Adwaita Sans",
@@ -508,26 +630,27 @@ def analyse(tx: pd.DataFrame, stores: pd.DataFrame) -> dict:
 # ---------------------------------------------------------------------------
 # charts
 # ---------------------------------------------------------------------------
-def chart_trend(weekly: pd.DataFrame, trend: dict) -> str:
+def chart_trend(weekly: pd.DataFrame, trend: dict, lang: str) -> str:
+    t = CHART_TEXT[lang]["trend"]
     fig, ax = plt.subplots(figsize=(12.4, 2.95))
     spend = weekly.SPEND / weekly.SPEND.iloc[0] * 100
     units = weekly.UNITS / weekly.UNITS.iloc[0] * 100
     spend_s = spend.rolling(13, center=True, min_periods=7).mean()
     units_s = units.rolling(13, center=True, min_periods=7).mean()
-    t = np.arange(len(weekly))
+    t_axis = np.arange(len(weekly))
 
     # raw weeks stay visible but faint; the 13-week average carries the eye
     ax.plot(weekly.index, units, color=BLUE, lw=0.8, alpha=0.20)
     ax.plot(weekly.index, spend, color=ACCENT, lw=0.8, alpha=0.18)
-    ax.plot(weekly.index, units_s, color=BLUE, lw=2.0, label="Units · 13-week avg")
-    ax.plot(weekly.index, spend_s, color=ACCENT, lw=2.2, label="Spend · 13-week avg")
+    ax.plot(weekly.index, units_s, color=BLUE, lw=2.0, label=t["units"])
+    ax.plot(weekly.index, spend_s, color=ACCENT, lw=2.2, label=t["spend"])
 
-    slope, intercept = np.polyfit(t, spend, 1)
-    ax.plot(weekly.index, intercept + slope * t, color=ACCENT, lw=1.5,
-            ls=(0, (5, 3)), label="Spend trend")
+    slope, intercept = np.polyfit(t_axis, spend, 1)
+    ax.plot(weekly.index, intercept + slope * t_axis, color=ACCENT, lw=1.5,
+            ls=(0, (5, 3)), label=t["fit"])
 
     ax.axhline(100, color=RULE, lw=1, ls=":")
-    ax.set_ylabel("index · first week = 100")
+    ax.set_ylabel(t["ylabel"])
     ax.set_xlim(weekly.index.min() - pd.Timedelta(days=25), weekly.index.max() + pd.Timedelta(days=25))
     ax.xaxis.set_major_locator(mdates.YearLocator())
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
@@ -538,46 +661,48 @@ def chart_trend(weekly: pd.DataFrame, trend: dict) -> str:
     finish(ax)
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.10), ncols=3,
               frameon=False, fontsize=9, handlelength=1.6, columnspacing=1.4)
-    return svg_of(fig, "trend")
+    return svg_of(fig, f"trend-{lang}")
 
 
-def chart_seasonality(decomp: dict) -> str:
+def chart_seasonality(decomp: dict, lang: str) -> str:
+    t = CHART_TEXT[lang]["season"]
     fig, ax = plt.subplots(figsize=(7.0, 4.55))
     x = np.arange(1, 53)
     units = decomp["UNITS"]["profile"]
     spend = decomp["SPEND"]["profile"]
 
     ax.fill_between(x, units, 0, color=ACCENT, alpha=0.07, linewidth=0)
-    ax.plot(x, spend, color=AMBER, lw=1.35, alpha=0.9, label="Spend")
-    ax.plot(x, units, color=ACCENT, lw=2.0, label="Units")
+    ax.plot(x, spend, color=AMBER, lw=1.35, alpha=0.9, label=t["spend"])
+    ax.plot(x, units, color=ACCENT, lw=2.0, label=t["units"])
     ax.axhline(0, color=MUTED, lw=0.9)
 
     peak = int(np.argmax(units)) + 1
     trough = int(np.argmin(units)) + 1
     ax.scatter([peak, trough], [units[peak - 1], units[trough - 1]],
                color=ACCENT, s=22, zorder=4)
-    ax.annotate(f"peak +{units[peak - 1]:.0f}%", (peak, units[peak - 1]),
+    ax.annotate(f"{t['peak']} +{units[peak - 1]:.0f}%", (peak, units[peak - 1]),
                 xytext=(8, 8), textcoords="offset points", fontsize=9,
                 color=ACCENT, fontweight="bold")
-    trough_label = f"trough {units[trough - 1]:.0f}%".replace("-", "−")
+    trough_label = f"{t['trough']} {units[trough - 1]:.0f}%".replace("-", "−")
     ax.annotate(trough_label, (trough, units[trough - 1]),
                 xytext=(8, -13), textcoords="offset points", fontsize=9,
                 color=ACCENT, fontweight="bold")
 
-    ax.set_xticks([1, 13, 26, 39, 52], ["Jan", "Apr", "Jul", "Oct", "Dec"])
+    ax.set_xticks([1, 13, 26, 39, 52], t["months"])
     ax.set_xlim(1, 52)
     ax.set_ylim(-34, 47)
-    ax.set_xlabel("week of year")
-    ax.set_ylabel("% vs fitted trend")
+    ax.set_xlabel(t["xlabel"])
+    ax.set_ylabel(t["ylabel"])
     finish(ax)
     ax.legend(loc="upper left", frameon=False, ncols=2, fontsize=9,
               handlelength=1.5, columnspacing=1.4)
-    return svg_of(fig, "seasonality")
+    return svg_of(fig, f"seasonality-{lang}")
 
 
-def chart_reach(fe: dict) -> str:
+def chart_reach(fe: dict, lang: str) -> str:
+    t = CHART_TEXT[lang]["reach"]
     fig, ax = plt.subplots(figsize=(6.3, 3.7))
-    labels = ["Reach\nbuying households", "Depth\nunits per household"]
+    labels = t["labels"]
     values = [fe["reach"]["point"] * 100, fe["depth"]["point"] * 100]
     lows = [fe["reach"]["lo"] * 100, fe["depth"]["lo"] * 100]
     highs = [fe["reach"]["hi"] * 100, fe["depth"]["hi"] * 100]
@@ -594,22 +719,17 @@ def chart_reach(fe: dict) -> str:
                 va="center", fontsize=8.4, color=FAINT)
     ax.set_yticks(y, labels)
     ax.set_xlim(0, 95)
-    ax.set_xlabel("lift vs own non-promo weeks (%) · cell + week fixed effects")
+    ax.set_xlabel(t["xlabel"])
     finish(ax, grid_axis="x")
     ax.tick_params(axis="y", labelsize=10)
-    return svg_of(fig, "reach")
+    return svg_of(fig, f"reach-{lang}")
 
 
-def chart_cost(cost: dict) -> str:
+def chart_cost(cost: dict, lang: str) -> str:
+    t = CHART_TEXT[lang]["cost"]
     fig, ax = plt.subplots(figsize=(7.4, 3.9))
     order = ["BAG SNACKS", "COLD CEREAL", "ORAL HYGIENE PRODUCTS", "FROZEN PIZZA"]
-    pretty = {
-        "BAG SNACKS": "Bag snacks",
-        "COLD CEREAL": "Cold cereal",
-        "ORAL HYGIENE PRODUCTS": "Oral hygiene",
-        "FROZEN PIZZA": "Frozen pizza",
-    }
-    rows = [(pretty[k], cost["categories"][k]) for k in order]
+    rows = [(t["names"][k], cost["categories"][k]) for k in order]
     y = np.arange(len(rows))[::-1]
 
     for yi, (label, d) in zip(y, rows):
@@ -620,21 +740,16 @@ def chart_cost(cost: dict) -> str:
                 fontsize=11.5, fontweight="bold", color=ACCENT)
     ax.set_yticks(y, [label for label, _ in rows])
     ax.set_xlim(0, 3.45)
-    ax.set_xlabel("discount per extra household-week ($)")
+    ax.set_xlabel(t["xlabel"])
     finish(ax, grid_axis="x")
     ax.tick_params(axis="y", labelsize=10)
-    return svg_of(fig, "cost")
+    return svg_of(fig, f"cost-{lang}")
 
 
-def chart_mechanism(mech: dict) -> str:
+def chart_mechanism(mech: dict, lang: str) -> str:
+    t = CHART_TEXT[lang]["mechanism"]
     fig, ax = plt.subplots(figsize=(7.4, 4.0))
     order = ["feature+display", "feature only", "display only", "TPR only"]
-    pretty = {
-        "feature+display": "Feature + display",
-        "feature only": "Feature only",
-        "display only": "Display only",
-        "TPR only": "Price cut only",
-    }
     vals = [mech[k]["reach"] * 100 for k in order]
     los = [mech[k]["reach_lo"] * 100 for k in order]
     his = [mech[k]["reach_hi"] * 100 for k in order]
@@ -649,39 +764,42 @@ def chart_mechanism(mech: dict) -> str:
                 fontweight="bold", color=INK)
         ax.text(hi + 5, yi - 0.23, f"[{lo:.0f}, {hi:.0f}]",
                 va="center", fontsize=8.2, color=FAINT)
-    ax.set_yticks(y, [pretty[k] for k in order])
+    ax.set_yticks(y, [t["names"][k] for k in order])
     ax.set_xlim(0, 275)
-    ax.set_xlabel("reach lift vs own non-promo weeks (%) · cell + week fixed effects")
+    ax.set_xlabel(t["xlabel"])
     finish(ax, grid_axis="x")
     ax.tick_params(axis="y", labelsize=10)
-    return svg_of(fig, "mechanism")
+    return svg_of(fig, f"mechanism-{lang}")
 
 
-def chart_unit_spend(promo: dict) -> str:
+def chart_unit_spend(promo: dict, lang: str) -> str:
+    t = CHART_TEXT[lang]["unit_spend"]
     fig, ax = plt.subplots(figsize=(7.0, 3.6))
-    labels = ["Units", "Spend"]
+    labels = t["labels"]
     vals = [promo["unit_ratio"], promo["spend_ratio"]]
     bars = ax.bar(labels, vals, width=0.42, color=[ACCENT, FAINT], zorder=2)
     ax.axhline(1, color=INK, lw=1, ls=(0, (3, 3)))
-    ax.text(1.45, 1.03, "no change", fontsize=8.2, color=MUTED, ha="right", va="bottom")
+    ax.text(0.5, 1.03, t["unchanged"], ha="center", va="bottom",
+            fontsize=8.2, color=MUTED)
     for bar, v in zip(bars, vals):
         ax.text(bar.get_x() + bar.get_width() / 2, v + 0.025, f"{v:.2f}×",
                 ha="center", va="bottom", fontsize=15, fontweight="bold", color=INK)
     ax.set_ylim(0, 2.0)
-    ax.set_ylabel("promo week vs own non-promo weeks (×)")
-    ax.set_xlabel("median across paired product–store cells")
+    ax.set_ylabel(t["ylabel"])
+    ax.set_xlabel(t["xlabel"])
     finish(ax, grid_axis="y")
     ax.tick_params(axis="x", labelsize=10)
-    return svg_of(fig, "unit_spend")
+    return svg_of(fig, f"unit_spend-{lang}")
 
 
-def chart_payback(payback: dict) -> str:
+def chart_payback(payback: dict, lang: str) -> str:
+    t = CHART_TEXT[lang]["payback"]
     fig, ax = plt.subplots(figsize=(11.2, 1.85))
-    rows = [
-        ("Observed promo spend", payback["observed"]),
-        ("Per-cell median", payback["per_cell"]),
-        ("Median lift × mean baseline", payback["median_rule"][:3]),
-    ]
+    rows = list(zip(t["rows"], [
+        payback["observed"],
+        payback["per_cell"],
+        payback["median_rule"][:3],
+    ]))
     y = np.arange(len(rows))[::-1]
     for yi, (label, d) in zip(y, rows):
         point, lo, hi = d
@@ -691,14 +809,14 @@ def chart_payback(payback: dict) -> str:
         ax.text(hi + 0.02, yi, f"{point:.2f}×", va="center", fontsize=11,
                 fontweight="bold", color=color)
     ax.axvline(1, color=INK, lw=1, ls=(0, (3, 3)))
-    ax.text(1.005, 2.42, "break-even", fontsize=8.2, color=MUTED)
+    ax.text(1.005, 2.42, t["even"], fontsize=8.2, color=MUTED)
     ax.set_yticks(y, [label for label, _ in rows])
     ax.set_xlim(0.74, 1.47)
     ax.set_ylim(-0.55, 2.65)
-    ax.set_xlabel("incremental revenue per $1 of discount · not profit (no cost field)")
+    ax.set_xlabel(t["xlabel"])
     finish(ax, grid_axis="x")
     ax.tick_params(axis="y", labelsize=9.2)
-    return svg_of(fig, "payback")
+    return svg_of(fig, f"payback-{lang}")
 
 
 # ---------------------------------------------------------------------------
@@ -732,13 +850,16 @@ def build() -> None:
         "category cost intervals now overlap"
 
     figs = {
-        "FIG_TREND": chart_trend(a["weekly"], a["trend"]),
-        "FIG_SEASON": chart_seasonality(a["decomp"]),
-        "FIG_REACH": chart_reach(a["hh"]["fe"]),
-        "FIG_COST": chart_cost(a["cost"]),
-        "FIG_MECH": chart_mechanism(a["hh"]["mech"]),
-        "FIG_UNIT_SPEND": chart_unit_spend(a["promo"]),
-        "FIG_PAYBACK": chart_payback(a["payback"]),
+        lang: {
+            "FIG_TREND": chart_trend(a["weekly"], a["trend"], lang),
+            "FIG_SEASON": chart_seasonality(a["decomp"], lang),
+            "FIG_REACH": chart_reach(a["hh"]["fe"], lang),
+            "FIG_COST": chart_cost(a["cost"], lang),
+            "FIG_MECH": chart_mechanism(a["hh"]["mech"], lang),
+            "FIG_UNIT_SPEND": chart_unit_spend(a["promo"], lang),
+            "FIG_PAYBACK": chart_payback(a["payback"], lang),
+        }
+        for lang in ("en", "ru")
     }
 
     shape = a["shape"]
@@ -853,13 +974,40 @@ def build() -> None:
         "BASKET_UNITS_P": pval(basket["units_per_basket"]["p_t"], 0).replace("e-09", "×10⁻⁹"),
         "DATE_START": f"{shape['start']:%b %Y}",
         "DATE_END": f"{shape['end']:%b %Y}",
+        "DATE_START_RU": f"{RU_MONTHS[shape['start'].month - 1]}.\u00a0{shape['start'].year}",
+        "DATE_END_RU": f"{RU_MONTHS[shape['end'].month - 1]}.\u00a0{shape['end'].year}",
+        "N_CATEGORIES_RU": (
+            f"{shape['categories']}\u00a0"
+            f"{ru_plural(shape['categories'], 'категория', 'категории', 'категорий')}"
+        ),
+        "HH_CELLS_RU": (
+            f"{hh['cells']:,}\u00a0"
+            f"{ru_plural(hh['cells'], 'пара', 'пары', 'пар')}"
+        ),
     }
 
-    template = TEMPLATE.read_text()
-    html = template
-    for key, val in {**figs, **values}.items():
-        html = html.replace("{{" + key + "}}", val)
-    assert "{{" not in html, "unreplaced placeholder remains: " + html[html.index("{{"):html.index("{{") + 40]
+    def render(text: str, extra: dict) -> str:
+        for key, val in {**values, **extra}.items():
+            text = text.replace("{{" + key + "}}", val)
+        return text
+
+    def unreplaced(text: str) -> str:
+        return text[text.index("{{"):text.index("{{") + 40]
+
+    # The Russian slides live in their own file and are injected into the English
+    # page as a second, hidden <main>, so the two decks ship as one portable file.
+    ru_slides = render(TEMPLATE_RU.read_text(), figs["ru"])
+    assert "{{" not in ru_slides, "unreplaced placeholder remains: " + unreplaced(ru_slides)
+
+    html = render(TEMPLATE.read_text(), figs["en"])
+    slide_tag = '<section class="slide'
+    assert html.count(slide_tag) == ru_slides.count(slide_tag) == 8, \
+        "English and Russian decks are out of step"
+    html = html.replace(
+        "{{DECK_RU}}",
+        '<main id="deck-ru" lang="ru" hidden>\n' + ru_slides + "\n</main>",
+    )
+    assert "{{" not in html, "unreplaced placeholder remains: " + unreplaced(html)
     OUT.write_text(html)
 
     # audit trail
