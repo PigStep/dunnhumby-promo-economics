@@ -820,6 +820,7 @@ def build() -> None:
         "MECH_FD_PLAIN": pct(hh["mech"]["feature+display"]["reach"], 0),
         "MECH_FD_LO": pct(hh["mech"]["feature+display"]["reach_lo"], 0),
         "MECH_FD_HI": pct(hh["mech"]["feature+display"]["reach_hi"], 0),
+        "MECH_FD_ROWS": f"{hh['mech']['feature+display']['rows']:,}",
         "MECH_F": pct(hh["mech"]["feature only"]["reach"], 0, True),
         "MECH_F_PLAIN": pct(hh["mech"]["feature only"]["reach"], 0),
         "MECH_D": pct(hh["mech"]["display only"]["reach"], 0, True),
@@ -876,14 +877,15 @@ def build() -> None:
           f"{dec['UNITS']['trend_share']:.1f}% · swing {dec['UNITS']['swing']:.1f}% · "
           f"perm p {dec['UNITS']['p_perm']:.4f}")
     print(f"  promotion          {promo['share_rows']:.2%} rows · depth "
-          f"{promo['median_depth']:.1%} · unit ratio {promo['unit_ratio']:.2f}x")
+          f"{promo['median_depth']:.1%} · unit ratio {promo['unit_ratio']:.2f}x · "
+          f"spend ratio {promo['spend_ratio']:.2f}x · {promo['cells']:,} cells")
     print(f"  reach / depth      {hh['fe']['reach']['point']:+.1%} "
           f"[{hh['fe']['reach']['lo']:+.1%}, {hh['fe']['reach']['hi']:+.1%}] / "
           f"{hh['fe']['depth']['point']:+.1%} "
           f"[{hh['fe']['depth']['lo']:+.1%}, {hh['fe']['depth']['hi']:+.1%}]")
     print(f"  mechanisms         pairwise differences all separate: "
           f"{hh['pairwise_all_separate']}")
-    print(f"  cost per household {cost['overall'][0]:.2f} "
+    print(f"  cost / hh-week     {cost['overall'][0]:.2f} "
           f"[{cost['overall'][1]:.2f}, {cost['overall'][2]:.2f}] · "
           f"{cost['cells']:,} cells · ${cost['discount']:,.0f} discount")
     for key in ["BAG SNACKS", "COLD CEREAL", "ORAL HYGIENE PRODUCTS", "FROZEN PIZZA"]:
@@ -891,10 +893,13 @@ def build() -> None:
         print(f"    {key:24s} ${c['point']:.2f} [${c['lo']:.2f}, ${c['hi']:.2f}]")
     print(f"  category intervals  disjoint in display order: "
           f"{all(cat_ints[i]['hi'] < cat_ints[i + 1]['lo'] for i in range(len(cat_ints) - 1))}")
-    print(f"  payback            {pb['median_rule'][0]:.2f} "
-          f"[{pb['median_rule'][1]:.2f}, {pb['median_rule'][2]:.2f}] · "
-          f"{pb['per_cell'][0]:.2f} [{pb['per_cell'][1]:.2f}, {pb['per_cell'][2]:.2f}] · "
-          f"{pb['observed'][0]:.2f} [{pb['observed'][1]:.2f}, {pb['observed'][2]:.2f}]")
+    print(f"  one-unit rows      {hh['one_unit_share']:.1%}")
+    print(f"  reach paired       {hh['d_hhs']:+.1%}")
+    print(f"  worst-case ratio   "
+          f"{hh['mech']['feature+display']['reach_lo'] / hh['mech']['TPR only']['reach_hi']:.1f}x "
+          f"(feature+display lower bound / TPR-only upper bound)")
+    print(f"  cost ratio         pizza / bag snacks "
+          f"{cost['categories']['FROZEN PIZZA']['point'] / cost['categories']['BAG SNACKS']['point']:.2f}x")
     print(f"  basket             spend {basket['per_basket']['pct']:+.2%} "
           f"(p {basket['per_basket']['p_t']:.1e}) · units "
           f"{basket['units_per_basket']['pct']:+.2%} "
