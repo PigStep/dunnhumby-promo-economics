@@ -586,6 +586,12 @@ def analyse(tx: pd.DataFrame, stores: pd.DataFrame) -> dict:
             "n": len(change),
         }
 
+    price_ratio = float(spend_ratio.median() / unit_ratio.median())
+    price_drop = 1.0 - price_ratio
+    gp_breakeven = float(
+        unit_ratio.median() * price_drop / (unit_ratio.median() - 1.0)
+    )
+
     return {
         "weekly": weekly,
         "trend": trend,
@@ -600,7 +606,9 @@ def analyse(tx: pd.DataFrame, stores: pd.DataFrame) -> dict:
             "median_depth": float(pr.loc[pr.ANY_PROMO == 1, "DEPTH"].median()),
             "unit_ratio": float(unit_ratio.median()),
             "spend_ratio": float(spend_ratio.median()),
-            "price_ratio": float(spend_ratio.median() / unit_ratio.median()),
+            "price_ratio": price_ratio,
+            "price_drop": price_drop,
+            "gp_breakeven": gp_breakeven,
             "tpr_share": float(mech["TPR only"]["rows"] / hh.ANY_PROMO.sum()),
             "cells": int(usable.sum()),
             "discount": float(discount_cost),
@@ -890,6 +898,8 @@ def build() -> None:
         "PROMO_UNIT_RATIO": f"{promo['unit_ratio']:.2f}",
         "PROMO_SPEND_RATIO": f"{promo['spend_ratio']:.2f}",
         "PRICE_RATIO": f"{promo['price_ratio']:.2f}",
+        "PROMO_PRICE_DROP": pct(promo["price_drop"], 1),
+        "PROMO_GP_BREAKEVEN": pct(promo["gp_breakeven"], 0),
         "TPR_SHARE": pct(promo["tpr_share"], 1),
         "PROMO_CELLS": f"{promo['cells']:,}",
         "SPEND_GROWTH": pct(trend["SPEND"]["per_year"], 2, True),
@@ -1044,6 +1054,8 @@ def build() -> None:
           f"spend ratio {promo['spend_ratio']:.2f}x · {promo['cells']:,} cells")
     print(f"  promo mix          TPR-only {promo['tpr_share']:.1%} of promo rows "
           f"({hh['mech']['TPR only']['rows']:,}) · price ratio {promo['price_ratio']:.2f}x")
+    print(f"  promo P&L          price drop {promo['price_drop']:.1%} · "
+          f"GP breakeven {promo['gp_breakeven']:.1%}")
     print(f"  reach / depth      {hh['fe']['reach']['point']:+.1%} "
           f"[{hh['fe']['reach']['lo']:+.1%}, {hh['fe']['reach']['hi']:+.1%}] / "
           f"{hh['fe']['depth']['point']:+.1%} "
