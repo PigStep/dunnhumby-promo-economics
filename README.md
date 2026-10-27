@@ -1,4 +1,4 @@
-# What does it cost to buy one more household (customer)?
+# How promos impact business?
 
 ![Python](https://img.shields.io/badge/python-3.14-3776ab?logo=python&logoColor=white)
 ![pandas](https://img.shields.io/badge/pandas-3.0-150458?logo=pandas&logoColor=white)
@@ -12,6 +12,11 @@ the unit is a household rather than a dollar: how much discount it takes to add 
 buying household, which kind of promotion does it, and whether that price survives the
 calendar. The revenue-versus-discount ratio it used to lead with is still here, now
 reported as a range, because the crediting rule moves it across break-even.
+
+**The short answer for a category team:** promotions buy households, not bigger
+baskets. Feature and display reach far more of them than a deeper silent discount, and
+the calendar moves weekly demand more than any trend in the panel. A slide version,
+[*Make the discount visible*](presentation/index.html), is included in the repository.
 
 ![Weekly units and spend, indexed to the first week](figures/01_units_vs_spend.png)
 
@@ -31,6 +36,57 @@ The analysis is descriptive in the main. Inferential claims carry their test in 
 notebook section — HAC and rank trend tests, a permutation test, Fisher-z intervals with
 Benjamini–Hochberg, a cluster bootstrap, paired tests — and where a number looks causal
 (price elasticity most of all) the notebook says why it is not identified.
+
+## Business insights
+
+The panel is descriptive, so these are readings rather than recommendations. Each
+carries the number behind it; the tests, intervals and caveats are in
+[Findings](#findings), and the [current briefing](#the-briefing) follows the same
+readings.
+
+### 1. Promotions add households more than they deepen baskets
+
+A promo week reaches **+76.5%** more buying households with the cell and the week held
+fixed. That is the effect this panel measures most clearly; how deep the price cut goes
+is the weaker of the two levers here. *(EDA §5.5)*
+
+### 2. Visibility moves reach more than discount depth
+
+Feature with display lifts reach **+220.1%**; a feature alone +87.9%, a display alone
++58.3%, and a temporary price cut on its own **+10.4%**. All pairwise differences
+separate in this panel. Whether the pattern survives a holdout is untested. *(EDA §5.5)*
+
+### 3. Reach costs less in some categories than others
+
+One extra buying household costs **$1.27** in bag snacks and **$2.95** in frozen pizza,
+and the four category intervals do not overlap. Reach is also concentrated: the largest
+5% of store–SKU cells supply 29.2% of all incremental households. Within this retailer,
+a fixed budget would buy more reach in the cheaper categories. *(EDA §5.5)*
+
+### 4. Seasonality is large enough to distort a simple comparison
+
+Seasonality carries **43.07%** of weekly unit variance against 6.83% for trend, and the
+peak-to-trough swing is **81.21%**. A peak week and a trough week are therefore not a
+like-for-like comparison; the same weeks last year, or a full year, are. *(EDA §3)*
+
+### 5. Value grew while volume did not
+
+Weekly spend grew **+3.25%/yr** while units did not (−0.21%/yr, p = 0.78). Paired within
+store, spend per basket is up **+6.5%** (p = 6.4e-38) and units per basket down 0.72%
+(p = 8.5e-09). A flat-volume, price-led base case is what the panel supports. *(EDA §2, §5.3)*
+
+### 6. Margin data is the missing input
+
+The same cells and the same $3.58M of discount return **0.86x**, **1.19x** or **1.34x**
+incremental revenue depending on the crediting rule, and **$2.06** is the cost of one more
+buying household with no benefit attached. With no cost field, a 20%-margin and a
+60%-margin item score identically here, so contribution margin and COGS are what would
+settle whether to scale. *(EDA §5.2, §5.5)*
+
+> [!NOTE]
+> The briefing closes on the same caution: **for reach, visibility; for clearance,
+> price.** This panel can show the first. The second needs margin and inventory data it
+> does not have.
 
 ## Data
 
@@ -70,6 +126,21 @@ cd notebooks && uv run jupyter lab
 
 Python 3.14 · pandas 3.0 · seaborn · scipy · scikit-learn, managed with `uv`.
 
+## The briefing
+
+[`presentation/index.html`](presentation/index.html) is the current investor briefing,
+*Make the discount visible — promotion economics*: eight slides, English and Russian in
+one self-contained file, using the same numbers and charts as the notebooks.
+
+- Open the file directly in a browser — no server or install is needed to read it.
+- `←`/`→` move between slides, `L` switches language, `?lang=ru` opens the Russian deck,
+  and `#s3` links a single slide.
+- The browser's print dialog produces a 16:9 PDF, because the deck is styled for it.
+- [`presentation/build_deck.py`](presentation/build_deck.py) recomputes every number and
+  redraws every chart from the workbook: `uv run python presentation/build_deck.py`.
+  Its console output is the deck's audit trail, and the build fails if either claim the
+  deck states as prose stops holding.
+
 ## What is in here
 
 | notebook | scope |
@@ -77,7 +148,7 @@ Python 3.14 · pandas 3.0 · seaborn · scipy · scikit-learn, managed with `uv`
 | `notebooks/0_prelim_analysis.ipynb` | shape, quality, coverage, referential integrity, first-order patterns |
 | `notebooks/1_distribution_analysis.ipynb` | distribution of the six key metrics — which test and transformation each one justifies |
 | `notebooks/EDA.ipynb` | trend, seasonality, store cohorts, and the metrics the panel can actually support |
-| `notebooks/2_readme_figures.ipynb` | regenerates the three figures above from the same data |
+| `notebooks/2_readme_figures.ipynb` | regenerates the five committed figures from the same data |
 | `notebooks/3_claims_audit.ipynb` | static checks on cells, names, links and `§` references |
 
 All notebooks ship unexecuted, so checking a number means running the cell rather than
@@ -97,6 +168,14 @@ Each number below is printed by the section it cites; each chart is regenerated 
   variance against 6.83% for trend, swinging 81.21% peak to trough; for `SPEND` it is
   39.86% against 9.98%, swinging 56.57%. A permutation test puts both above the shuffle
   floor (p = 0.0050 and 0.0120). *(EDA §3)*
+
+![Seasonal profile of weekly units and spend](figures/05_seasonality.png)
+
+*The seasonal component of the weekly log series, phase-averaged over the panel's three
+cycles. Read it as per cent above or below the fitted trend: units peak at +37% and trough
+at −24%, spend at +26% and −19%. The 81.21% swing is the log-space peak-to-trough gap
+converted back, which is why it exceeds the difference between the two annotated points.*
+
 - **It repeats, but only moderately.** Across 52 paired ISO weeks, 9 of 15 strata have a
   2010-vs-2011 correlation whose 95% interval excludes zero, 8 survive Benjamini–Hochberg.
   `VALUE` leads at 0.521 [0.289, 0.695] while `MAINSTREAM` (0.179) and `UPSCALE` (0.218)
@@ -180,7 +259,7 @@ Baskets are not growing — they are getting more expensive. Pairing each store'
 
 ## Figures
 
-The four PNGs in `figures/` are committed, because GitHub does not render notebook
+The five PNGs in `figures/` are committed, because GitHub does not render notebook
 outputs inside a README. They are generated by
 [`notebooks/2_readme_figures.ipynb`](notebooks/2_readme_figures.ipynb), which re-draws
 results from `EDA.ipynb` and prints every number quoted in the captions above. *Run All*
@@ -211,6 +290,11 @@ the figure is stale.
 │   ├── 2_readme_figures.ipynb     regenerates the figures above
 │   └── 3_claims_audit.ipynb       static checks, no data needed
 ├── figures/                       committed PNGs used by this README
+├── presentation/                  investor briefing (EN/RU) and its build script
+│   ├── template.html
+│   ├── template.ru.html
+│   ├── build_deck.py              recomputes every number in the deck
+│   └── index.html                 generated, self-contained
 ├── data/                          put the .xlsx here (gitignored)
 ├── src/ecommerce_analysis/        not usable — see Status
 ├── pyproject.toml
@@ -225,7 +309,7 @@ No test suite, no linter or formatter config, no CI. Two notebooks stand in for 
 resolves every link and `§` reference; `notebooks/2_readme_figures.ipynb` re-prints each
 number the captions quote. The numbers themselves are verified by re-running `EDA.ipynb`
 and comparing the printed values with the prose — the standard the notebooks are written
-to.
+to. `presentation/build_deck.py` carries the same audit trail for the deck.
 
 `src/ecommerce_analysis/` is a leftover: its `__init__.py` imports a module deleted in
 `4066928`, so `import ecommerce_analysis` raises `ModuleNotFoundError`. Nothing in the
