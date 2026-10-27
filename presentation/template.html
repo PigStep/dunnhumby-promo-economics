@@ -342,7 +342,7 @@
       <div class="slide-head">
         <div>
           <div class="kicker">Recommendation 01 · Reach</div>
-          <h2>Promotions buy households, not baskets.</h2>
+          <h2>Promo ≠ bigger basket.</h2>
         </div>
         <div class="slide-no">02 / 08</div>
       </div>
@@ -428,7 +428,7 @@
       <div class="slide-head">
         <div>
           <div class="kicker">Recommendation 03 · Risk</div>
-          <h2>The default mix is the risk.</h2>
+          <h2>Half the promos are silent price cuts.</h2>
         </div>
         <div class="slide-no">04 / 08</div>
       </div>
@@ -455,7 +455,7 @@
             <div class="stat-label">of promo weeks are silent price cuts</div>
             <div class="stat-test">{{MECH_TPR_ROWS}} rows · reach lift only {{MECH_TPR}} [{{MECH_TPR_LO}}, {{MECH_TPR_HI}}]</div>
           </div>
-          <div class="note"><strong>The risk is the mix, not a proven loss.</strong> Half the promo rows are price-cut-only, the weakest reach lever. Whether the extra spend covers the discount depends on the crediting rule and on margin, which the panel lacks. <strong>What this means:</strong> audit how much discount budget goes to price-cut-only weeks.</div>
+          <div class="note"><strong>The risk is the mix, not a proven loss.</strong> Price-cut-only weeks are the weakest reach lever: {{MECH_TPR}} reach vs {{MECH_FD}} for feature + display. The panel has no margin, so we can’t prove profit or loss. <strong>What this means:</strong> audit how much discount budget goes to silent discounts.</div>
         </div>
       </div>
       <div class="slide-footer">
@@ -514,11 +514,11 @@
       <div class="slide-head">
         <div>
           <div class="kicker">Recommendation 05 · Calendar</div>
-          <h2>The calendar sets the baseline, not the lift.</h2>
+          <h2>Seasonality matters. Check the calendar before you test.</h2>
         </div>
         <div class="slide-no">06 / 08</div>
       </div>
-      <p class="dek">Seasonality carries <strong class="accent">{{SEASON_UNITS}} of weekly units variance</strong>; trend carries {{TREND_UNITS}}. Peak weeks run {{SWING_UNITS}} above trough. That is why promos are judged against the same weeks — and the reach lift survives: {{REACH}} with week effects vs {{REACH_PAIRED}} paired.</p>
+      <p class="dek"><strong>What this means:</strong> the peak is {{SWING_UNITS}} above the trough — compare like weeks or run a year. The reach lift survives: {{REACH}} with week effects vs {{REACH_PAIRED}} paired.</p>
 
       <div class="split split--chart">
         <div class="figure figure--side">
@@ -527,12 +527,7 @@
         </div>
         <div class="stack">
           <div class="stat">
-            <div class="stat-value accent">{{SEASON_UNITS}}</div>
-            <div class="stat-label">of units variance is seasonal</div>
-            <div class="stat-test">vs {{TREND_UNITS}} for trend</div>
-          </div>
-          <div class="stat">
-            <div class="stat-value">{{SWING_UNITS}}</div>
+            <div class="stat-value accent">{{SWING_UNITS}}</div>
             <div class="stat-label">peak weeks above trough, units</div>
             <div class="stat-test">{{SWING_SPEND}} for spend</div>
           </div>
@@ -541,7 +536,7 @@
             <div class="stat-label">chance of this pattern if weeks were random</div>
             <div class="stat-test">{{SEASON_N_UNITS}} of 2,000 shuffles · spend p = {{SEASON_P_SPEND}}</div>
           </div>
-          <div class="note"><strong>What this means:</strong> the peak is {{SWING_UNITS}} above the trough, so a short test can be won or lost by the calendar — compare like weeks or run a year. <strong>What we measure:</strong> the same item’s promo weeks vs its own non-promo weeks, with week effects removed — an association, not a causal lift. Repeatability is moderate: {{REPEAT_EXCL}} of {{REPEAT_N}} cohorts, {{REPEAT_BH}} after correction; use the average shape.</div>
+          <div class="note"><strong>What we measure:</strong> the same item’s promo weeks vs its own non-promo weeks, with week effects removed — an association, not a causal lift. <strong>Why it matters:</strong> seasonality carries {{SEASON_UNITS}} of weekly units variance vs {{TREND_UNITS}} for trend. Repeatability is moderate: {{REPEAT_EXCL}} of {{REPEAT_N}} cohorts, {{REPEAT_BH}} after correction; use the average shape.</div>
         </div>
       </div>
       <div class="slide-footer">
