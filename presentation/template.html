@@ -2,12 +2,12 @@
 <html lang="en"
       data-title-en="Make the discount visible — promotion economics"
       data-title-ru="Сделайте скидку видимой — экономика промо"
-      data-desc-en="Investor briefing: feature and display buy far more reach than silent price cuts. 77 stores, 55 UPCs, 156 weeks, 2009–2012."
-      data-desc-ru="Брифинг для инвестора: листовка и выкладка дают куда больший охват, чем тихие скидки. 77 магазинов, 55 UPC, 156 недель, 2009–2012.">
+      data-desc-en="Investor briefing: feature and display reach far more buying households than silent price cuts. 77 stores, 55 UPCs, 156 weeks, 2009–2012."
+      data-desc-ru="Брифинг для инвестора: листовка и выкладка привлекают куда больше покупающих домохозяйств, чем тихие скидки. 77 магазинов, 55 UPC, 156 недель, 2009–2012.">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Investor briefing: feature and display buy far more reach than silent price cuts. 77 stores, 55 UPCs, 156 weeks, 2009–2012.">
+<meta name="description" content="Investor briefing: feature and display reach far more buying households than silent price cuts. 77 stores, 55 UPCs, 156 weeks, 2009–2012.">
 <title>Make the discount visible — promotion economics</title>
 <style>
   :root{
@@ -36,7 +36,7 @@
   ::selection{background:var(--accent-soft);color:var(--ink)}
   .slide{
     min-height:100svh;display:flex;align-items:center;
-    padding:clamp(28px,4.6vw,68px) clamp(24px,5.2vw,80px);
+    padding:clamp(24px,3.6vw,52px) clamp(24px,5.2vw,80px);
     border-bottom:1px solid var(--rule);scroll-snap-align:start;position:relative;
   }
   .slide--title{background:var(--surface);border-bottom-color:var(--rule)}
@@ -67,10 +67,10 @@
   .nowrap{white-space:nowrap}
   .slide-footer{
     display:flex;justify-content:space-between;gap:18px;align-items:baseline;
-    margin-top:clamp(18px,2.2vw,26px);padding-top:11px;border-top:1px solid var(--rule-soft);
+    margin-top:clamp(14px,1.8vw,20px);padding-top:11px;border-top:1px solid var(--rule-soft);
     font-size:10.5px;line-height:1.45;color:var(--faint);letter-spacing:.01em;
   }
-  .slide-footer .source{max-width:88ch}
+  .slide-footer .source{max-width:112ch}
 
   /* title */
   .title-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:clamp(32px,5vw,72px);align-items:center}
@@ -89,7 +89,7 @@
   .hero-note{margin-top:22px;padding-top:12px;border-top:1px solid var(--rule);font-size:11.5px;line-height:1.55;color:var(--faint);max-width:30ch}
 
   /* layout */
-  .split{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(280px,.82fr);gap:clamp(30px,4.4vw,64px);align-items:center;margin-top:clamp(22px,3vw,38px)}
+  .split{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(280px,.82fr);gap:clamp(30px,4.4vw,64px);align-items:center;margin-top:clamp(18px,2.4vw,30px)}
   .split--chart{grid-template-columns:minmax(0,1.12fr) minmax(290px,.88fr)}
   .panel-layout{margin-top:clamp(24px,3.2vw,40px);align-items:start}
   .stack{display:flex;flex-direction:column;gap:20px}
@@ -114,7 +114,7 @@
   .strip strong{color:var(--ink);font-weight:600}
 
   /* statistics */
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,34px);margin-top:clamp(18px,2.2vw,26px)}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,34px);margin-top:clamp(14px,1.8vw,20px)}
   .stat{border-top:1px solid var(--ink);padding-top:12px}
   .stat-value{font-size:clamp(27px,3.1vw,43px);line-height:1;letter-spacing:-.045em;font-variant-numeric:tabular-nums;font-weight:500}
   .stat-value.accent{color:var(--accent)}
@@ -122,7 +122,7 @@
   .stat-test{margin-top:7px;font-family:var(--mono);font-size:10px;line-height:1.5;color:var(--faint)}
 
   /* figures */
-  .figure{margin-top:clamp(18px,2.3vw,28px);border-top:1px solid var(--ink);padding-top:12px}
+  .figure{margin-top:clamp(14px,1.9vw,22px);border-top:1px solid var(--ink);padding-top:12px}
   .figure svg{display:block;width:100%;height:auto}
   .figcap{margin-top:9px;font-size:10.5px;line-height:1.5;color:var(--faint);max-width:100ch}
   .figure--side{margin-top:0}
@@ -315,7 +315,7 @@
         <div class="title-copy">
           <div class="kicker">Promotion economics · US grocery · 2009–2012</div>
           <h1>Make the <span class="accent">discount visible.</span></h1>
-          <p class="dek">156 weeks of sales from 77 US grocery stores. Feature and display buy far more reach than a silent price cut.</p>
+          <p class="dek">156 weeks of sales from 77 US grocery stores. Feature and display reach far more buying households than a silent price cut.</p>
           <div class="title-meta">
             <span>{{N_ROWS}} store–product–week records</span>
             <span>{{N_WEEKS}} weeks · {{N_STORES}} stores × {{N_UPCS}} products</span>
@@ -324,14 +324,14 @@
         </div>
         <aside class="hero-stat">
           <div class="hero-value">{{MECH_FD}}</div>
-          <div class="hero-label">reach lift from feature + display</div>
+          <div class="hero-label">more buying households in feature + display weeks</div>
           <div class="hero-test">vs {{MECH_TPR}} from a price cut alone<br>95% CI [{{MECH_FD_LO}}, {{MECH_FD_HI}}]</div>
-          <div class="hero-note">Reach is household-weeks, not new customers. The panel has no customer ID; it counts households per product and store, week by week.</div>
+          <div class="hero-note">Reach counts buying households per store–item–week — a household-week. The same household can appear in several weeks; the panel has no customer ID.</div>
         </aside>
       </div>
       <div class="slide-footer">
         <span class="source">Source: Dunnhumby, “Breakfast at the Frat” · weekly store × SKU panel · {{DATE_START}}–{{DATE_END}}</span>
-        <span>Prepared October 2026 · 8 slides · 95% intervals, two-sided tests</span>
+        <span>Prepared October 2026 · 8 slides · 95% intervals show the range consistent with the data</span>
       </div>
     </div>
   </section>
@@ -342,11 +342,11 @@
       <div class="slide-head">
         <div>
           <div class="kicker">Recommendation 01 · Reach</div>
-          <h2>Measure reach, not just units.</h2>
+          <h2>Promotions buy households, not baskets.</h2>
         </div>
         <div class="slide-no">02 / 08</div>
       </div>
-      <p class="dek">A promo week reaches <strong class="accent">{{REACH_PLAIN}} more buying households</strong> [{{REACH_LO}}, {{REACH_HI}}]. Units per buying household rise only {{DEPTH_PLAIN}} [{{DEPTH_LO}}, {{DEPTH_HI}}].</p>
+      <p class="dek">In a promo week, <strong class="accent">{{REACH_PLAIN}} more households buy the item</strong> in that store than in the same store’s non-promo weeks [{{REACH_LO}}, {{REACH_HI}}]. Each buyer takes only {{DEPTH_PLAIN}} more units [{{DEPTH_LO}}, {{DEPTH_HI}}].</p>
 
       <div class="split split--chart">
         <div class="figure figure--side">
@@ -365,15 +365,15 @@
             <div class="stat-test">95% CI [{{DEPTH_LO}}, {{DEPTH_HI}}] · same pairs</div>
           </div>
           <div class="stat">
-            <div class="stat-value">{{ONE_UNIT_SHARE}}</div>
-            <div class="stat-label">of rows are exactly one unit per household</div>
-            <div class="stat-test">{{REACH_SHARE}} of the unit lift is reach · HHS R² {{HH_R2}}</div>
+            <div class="stat-value">{{REACH_SHARE}}</div>
+            <div class="stat-label">of the unit lift is more buying households</div>
+            <div class="stat-test">not bigger baskets · log decomposition · R² {{HH_R2}}</div>
           </div>
-          <div class="note"><strong>Reach is household-weeks, not new customers.</strong> The panel cannot separate new buyers from repeat buyers or switchers.</div>
+          <div class="note"><strong>A household-week is one household buying in one week.</strong> The same household can appear in several weeks. It is not unique reach, new customers, or CAC. <strong>What this means:</strong> {{REACH}} more buying households and {{DEPTH}} more units each compound to {{UNIT_LIFT}} units — grow household reach; the depth lever is about 5%.</div>
         </div>
       </div>
       <div class="slide-footer">
-        <span class="source">Reach = HHS, the count of households buying that UPC in that store-week. HHS explains {{HH_R2}} of log-unit variance, so the {{REACH_SHARE}} split is partly a property of the metric.</span>
+        <span class="source">Reach = HHS, households buying that UPC in that store-week. 95% interval = range consistent with the data. HHS explains {{HH_R2}} of log-unit variance, so the {{REACH_SHARE}} split is partly a property of the metric.</span>
         <span>Source: EDA §5.5</span>
       </div>
     </div>
@@ -389,7 +389,7 @@
         </div>
         <div class="slide-no">03 / 08</div>
       </div>
-      <p class="dek">Feature + display lifts reach by <strong class="accent">{{MECH_FD_PLAIN}}</strong>. Feature alone lifts it by {{MECH_F_PLAIN}}, display alone by {{MECH_D_PLAIN}}, and a price cut alone by {{MECH_TPR_PLAIN}}. All six pairwise differences separate.</p>
+      <p class="dek">Advertising the item and putting it on display lifts the count of buying households by <strong class="accent">{{MECH_FD_PLAIN}}</strong> [{{MECH_FD_LO}}, {{MECH_FD_HI}}]. Feature alone lifts it by {{MECH_F_PLAIN}}, display alone by {{MECH_D_PLAIN}}, and a price cut alone by {{MECH_TPR_PLAIN}} [{{MECH_TPR_LO}}, {{MECH_TPR_HI}}]. All six pairwise differences separate.</p>
 
       <div class="split split--chart">
         <div class="figure figure--side">
@@ -399,20 +399,20 @@
         <div class="stack">
           <div class="stat">
             <div class="stat-value accent">{{MECH_FD}}</div>
-            <div class="stat-label">reach lift from feature + display</div>
+            <div class="stat-label">more buying households in feature + display weeks</div>
             <div class="stat-test">95% CI [{{MECH_FD_LO}}, {{MECH_FD_HI}}] · {{MECH_FD_ROWS}} rows</div>
           </div>
           <div class="stat">
             <div class="stat-value">{{MECH_TPR}}</div>
-            <div class="stat-label">reach lift from a price cut alone</div>
+            <div class="stat-label">more buying households from a price cut alone</div>
             <div class="stat-test">95% CI [{{MECH_TPR_LO}}, {{MECH_TPR_HI}}] · {{MECH_TPR_ROWS}} rows — the most common mechanism</div>
           </div>
           <div class="stat">
             <div class="stat-value accent">{{MECH_WORST_RATIO}}</div>
-            <div class="stat-label">worst-case reach ratio: feature+display lower bound vs TPR-only upper bound</div>
-            <div class="stat-test">{{MECH_FD_LO}} vs {{MECH_TPR_HI}} — the gap is not a point-estimate artifact</div>
+            <div class="stat-label">more reach than a price cut, even at the pessimistic end</div>
+            <div class="stat-test">{{MECH_FD_LO}} lower bound vs {{MECH_TPR_HI}} upper bound · {{MECH_WORST_RATIO}} ratio</div>
           </div>
-          <div class="note"><strong>Keep TPR for clearance.</strong> The panel cannot measure inventory or sell-through, but a silent price cut is the weakest way to buy reach. Promotions are scheduled, not randomized; the lift is an association until a holdout.</div>
+          <div class="note"><strong>Keep TPR for clearance.</strong> It is the weakest way to buy reach. <strong>Read the lift as association:</strong> retailers schedule promos when they expect demand; week and item effects remove the calendar, not that choice. A holdout is the causal test. <strong>What this means:</strong> pay for visibility, not a deeper silent discount.</div>
         </div>
       </div>
       <div class="slide-footer">
@@ -428,11 +428,11 @@
       <div class="slide-head">
         <div>
           <div class="kicker">Recommendation 03 · Risk</div>
-          <h2>The default is the risk.</h2>
+          <h2>The default mix is the risk.</h2>
         </div>
         <div class="slide-no">04 / 08</div>
       </div>
-      <p class="dek">{{PROMO_SHARE}} of rows are on promotion at a median {{PROMO_DEPTH}} discount. A promo week sells <strong class="accent">{{PROMO_UNIT_RATIO}}× the units</strong> but takes only {{PROMO_SPEND_RATIO}}× the spend. The discount eats the difference.</p>
+      <p class="dek">{{PROMO_SHARE}} of store–item–weeks are on promo at a median {{PROMO_DEPTH}} off. A promo week sells <strong class="accent">{{PROMO_UNIT_RATIO}}× the units</strong> for {{PROMO_SPEND_RATIO}}× the money. The gap is the price: {{PROMO_UNIT_RATIO}}× units × {{PRICE_RATIO}}× price ≈ {{PROMO_SPEND_RATIO}}× spend.</p>
 
       <div class="split split--chart">
         <div class="figure figure--side">
@@ -442,7 +442,7 @@
         <div class="stack">
           <div class="stat">
             <div class="stat-value accent">{{PROMO_SHARE}}</div>
-            <div class="stat-label">of rows are on promotion</div>
+            <div class="stat-label">of store–item–weeks are on promo</div>
             <div class="stat-test">median depth {{PROMO_DEPTH}}</div>
           </div>
           <div class="stat">
@@ -451,15 +451,15 @@
             <div class="stat-test">spend {{PROMO_SPEND_RATIO}}× · {{PROMO_CELLS}} paired cells</div>
           </div>
           <div class="stat">
-            <div class="stat-value">{{MECH_TPR_ROWS}}</div>
-            <div class="stat-label">TPR-only rows — the most common mechanism</div>
-            <div class="stat-test">reach lift only {{MECH_TPR}} [{{MECH_TPR_LO}}, {{MECH_TPR_HI}}]</div>
+            <div class="stat-value">{{TPR_SHARE}}</div>
+            <div class="stat-label">of promo weeks are silent price cuts</div>
+            <div class="stat-test">{{MECH_TPR_ROWS}} rows · reach lift only {{MECH_TPR}} [{{MECH_TPR_LO}}, {{MECH_TPR_HI}}]</div>
           </div>
-          <div class="note"><strong>The default is frequent, silent discounting.</strong> It moves units; it does not move spend proportionally. A deeper price cut is not the reach lever.</div>
+          <div class="note"><strong>The risk is the mix, not a proven loss.</strong> Half the promo rows are price-cut-only, the weakest reach lever. Whether the extra spend covers the discount depends on the crediting rule and on margin, which the panel lacks. <strong>What this means:</strong> audit how much discount budget goes to price-cut-only weeks.</div>
         </div>
       </div>
       <div class="slide-footer">
-        <span class="source">Promo weeks are paired against the same cell’s non-promo weeks. Unit and spend ratios are medians across {{PROMO_CELLS}} cells; no cost or margin field.</span>
+        <span class="source">Promo weeks are paired against the same cell’s non-promo weeks. Unit and spend ratios are medians across {{PROMO_CELLS}} cells; no cost or margin field. Payback under three crediting rules: {{PB_MEDIAN}}× / {{PB_CELL}}× / {{PB_OBS}}× — not profit.</span>
         <span>Source: EDA §5.2</span>
       </div>
     </div>
@@ -475,7 +475,7 @@
         </div>
         <div class="slide-no">05 / 08</div>
       </div>
-      <p class="dek">For the same discount, bag snacks reach <strong class="accent">{{COST_RATIO}} more incremental households</strong> than frozen pizza. The four category intervals do not overlap.</p>
+      <p class="dek">For the same discount, bag snacks buy <strong class="accent">{{COST_RATIO}} more extra household-weeks</strong> than frozen pizza. The four category intervals do not overlap.</p>
 
       <div class="split split--chart">
         <div class="figure figure--side">
@@ -495,14 +495,14 @@
           </div>
           <div class="stat">
             <div class="stat-value">{{COST_CONC}}</div>
-            <div class="stat-label">of incremental households come from the top 5% of pairs</div>
-            <div class="stat-test">{{COST_NEG}} of pairs are negative — don’t treat the average as universal</div>
+            <div class="stat-label">of extra household-weeks come from the top 5% of pairs</div>
+            <div class="stat-test">{{CONC_CELLS}} of {{COST_CELLS}} pairs · {{COST_NEG}} of pairs negative</div>
           </div>
-          <div class="note"><strong>Cheaper reach is not more profit.</strong> With no margin field, this ranks reach efficiency, not profit. A small store should not read the category average as its own.</div>
+          <div class="note"><strong>{{COST}} is a volume-weighted average, not a typical store.</strong> Five percent of pairs supply {{COST_CONC}} of the reach — {{CONC_RATIO}} their share. <strong>What this means:</strong> target high-volume pairs; expect worse than average elsewhere.</div>
         </div>
       </div>
       <div class="slide-footer">
-        <span class="source">Cost = discount given up ÷ calendar-adjusted incremental household-weeks. Cluster bootstrap resamples product–store pairs (2,000 draws), not rows.</span>
+        <span class="source">Cost = discount given up ÷ calendar-adjusted extra household-weeks. Cluster bootstrap resamples product–store pairs (2,000 draws), not rows. A cost, not a return: no margin field.</span>
         <span>Source: EDA §5.5</span>
       </div>
     </div>
@@ -514,11 +514,11 @@
       <div class="slide-head">
         <div>
           <div class="kicker">Recommendation 05 · Calendar</div>
-          <h2>Time the calendar; the lift survives it.</h2>
+          <h2>The calendar sets the baseline, not the lift.</h2>
         </div>
         <div class="slide-no">06 / 08</div>
       </div>
-      <p class="dek">Seasonality carries <strong class="accent">{{SEASON_UNITS}} of weekly units variance</strong>; trend carries {{TREND_UNITS}}. Peak weeks run {{SWING_UNITS}} above trough (permutation p = {{SEASON_P_UNITS}}).</p>
+      <p class="dek">Seasonality carries <strong class="accent">{{SEASON_UNITS}} of weekly units variance</strong>; trend carries {{TREND_UNITS}}. Peak weeks run {{SWING_UNITS}} above trough. That is why promos are judged against the same weeks — and the reach lift survives: {{REACH}} with week effects vs {{REACH_PAIRED}} paired.</p>
 
       <div class="split split--chart">
         <div class="figure figure--side">
@@ -533,19 +533,19 @@
           </div>
           <div class="stat">
             <div class="stat-value">{{SWING_UNITS}}</div>
-            <div class="stat-label">peak-to-trough swing in units</div>
+            <div class="stat-label">peak weeks above trough, units</div>
             <div class="stat-test">{{SWING_SPEND}} for spend</div>
           </div>
           <div class="stat">
             <div class="stat-value">p = {{SEASON_P_UNITS}}</div>
-            <div class="stat-label">permutation test against 2,000 shuffles</div>
-            <div class="stat-test">spend p = {{SEASON_P_SPEND}}</div>
+            <div class="stat-label">chance of this pattern if weeks were random</div>
+            <div class="stat-test">{{SEASON_N_UNITS}} of 2,000 shuffles · spend p = {{SEASON_P_SPEND}}</div>
           </div>
-          <div class="note"><strong>The calendar does not explain the reach lift.</strong> Promotions are scheduled, not randomized, but a cell×week fit gives reach {{REACH}} vs {{REACH_PAIRED}} paired. Repeatability is moderate: {{REPEAT_EXCL}} of {{REPEAT_N}} cohorts have a 2010-vs-2011 interval excluding zero, {{REPEAT_BH}} after BH; use the average shape.</div>
+          <div class="note"><strong>What this means:</strong> the peak is {{SWING_UNITS}} above the trough, so a short test can be won or lost by the calendar — compare like weeks or run a year. <strong>What we measure:</strong> the same item’s promo weeks vs its own non-promo weeks, with week effects removed — an association, not a causal lift. Repeatability is moderate: {{REPEAT_EXCL}} of {{REPEAT_N}} cohorts, {{REPEAT_BH}} after correction; use the average shape.</div>
         </div>
       </div>
       <div class="slide-footer">
-        <span class="source">Classical additive decomposition of log1p weekly totals; 52-week centred moving average. Permutation test shuffles the detrended series against week labels. Repeat-year: Fisher-z intervals with Benjamini–Hochberg across {{REPEAT_N}} strata.</span>
+        <span class="source">Classical additive decomposition of log1p weekly totals; 52-week centred moving average. Permutation test: reorder the 156 weeks at random 2,000 times; p is the share of shuffles with a pattern at least as strong. Repeat-year: Fisher-z intervals with Benjamini–Hochberg across {{REPEAT_N}} strata.</span>
         <span>Source: EDA §3–§5.5</span>
       </div>
     </div>
@@ -586,7 +586,7 @@
         </div>
       </div>
       <div class="slide-footer">
-        <span class="source">Trend tests: OLS with Newey–West HAC(4), OLS with 51 week-of-year dummies, Mann–Kendall. Basket: paired t-test and Wilcoxon on each store’s 2009 vs 2011 median; n = {{N_STORES}} stores.</span>
+        <span class="source">Trend tests: OLS with Newey–West HAC(4) (allows for week-to-week correlation), OLS with 51 week-of-year dummies, Mann–Kendall (rank test). All three agree. Basket: paired t-test and Wilcoxon on each store’s 2009 vs 2011 median; n = {{N_STORES}} stores.</span>
         <span>Source: EDA §2, §5.3</span>
       </div>
     </div>
@@ -635,7 +635,7 @@
 
       <div class="closing"><strong>For reach, visibility. For clearance, price.</strong> This panel can prove the first — test the second.</div>
       <div class="slide-footer">
-        <span class="source">Methods: HAC(4), season-adjusted OLS, Mann–Kendall; 2,000-shuffle permutation; Fisher-z with Benjamini–Hochberg; cell + week fixed effects with cell-clustered SEs; cluster bootstrap over product–store pairs. Full audit in <span class="mono">notebooks/EDA.ipynb</span>.</span>
+        <span class="source">95% interval = range consistent with the data; p = chance of this result if there were no effect. Methods: HAC(4), season-adjusted OLS, Mann–Kendall; 2,000-shuffle permutation; Fisher-z with Benjamini–Hochberg; cell + week fixed effects with cell-clustered SEs; cluster bootstrap over product–store pairs. Full audit in <span class="mono">notebooks/EDA.ipynb</span>.</span>
         <span>Prepared October 2026</span>
       </div>
     </div>

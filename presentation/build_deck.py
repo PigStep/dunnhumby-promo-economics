@@ -73,7 +73,7 @@ CHART_TEXT = {
             "months": ["Jan", "Apr", "Jul", "Oct", "Dec"],
         },
         "reach": {
-            "labels": ["Reach\nbuying households", "Depth\nunits per household"],
+            "labels": ["More buying\nhouseholds", "Units per\nbuying household"],
             "xlabel": "lift vs own non-promo weeks (%) · cell + week fixed effects",
         },
         "cost": {
@@ -123,7 +123,7 @@ CHART_TEXT = {
             "months": ["янв", "апр", "июл", "окт", "дек"],
         },
         "reach": {
-            "labels": ["Охват\nкупившие домохозяйства", "Глубина\nштук на домохозяйство"],
+            "labels": ["Больше покупающих\nдомохозяйств", "Штук на покупающее\nдомохозяйство"],
             "xlabel": "прирост к своим неакционным неделям (%) · фикс. эффекты ячейки и недели",
         },
         "cost": {
@@ -361,6 +361,7 @@ def analyse(tx: pd.DataFrame, stores: pd.DataFrame) -> dict:
             "seasonal_share": float(100 * np.var(seasonal) / np.var(y)),
             "swing": float(100 * np.expm1(amp)),
             "p_perm": float(np.mean(null >= observed)),
+            "n_extreme": int((null >= observed).sum()),
             "profile": 100 * np.expm1(seasonal[:52]),
         }
 
@@ -546,13 +547,16 @@ def analyse(tx: pd.DataFrame, stores: pd.DataFrame) -> dict:
             "cells": int(pick.sum()), "households": float(extra.to_numpy()[pick].sum()),
         }
     biggest = extra.sort_values(ascending=False).head(int(0.05 * len(extra)))
+    conc_share = float(biggest.sum() / extra.sum())
     cost = {
         "cells": int(paired_cells.sum()),
         "discount": float(disc.sum()),
         "overall": (float(overall[0]), float(overall[1]), float(overall[2])),
         "raw": float(disc.sum() / extra_raw.sum()),
         "categories": costs,
-        "concentration": float(biggest.sum() / extra.sum()),
+        "concentration": conc_share,
+        "conc_cells": int(0.05 * len(extra)),
+        "conc_ratio": conc_share / 0.05,
         "negative_share": float((extra < 0).mean()),
         "reach_share": float(d_hhs.mean() / d_units.mean()),
     }
@@ -596,6 +600,8 @@ def analyse(tx: pd.DataFrame, stores: pd.DataFrame) -> dict:
             "median_depth": float(pr.loc[pr.ANY_PROMO == 1, "DEPTH"].median()),
             "unit_ratio": float(unit_ratio.median()),
             "spend_ratio": float(spend_ratio.median()),
+            "price_ratio": float(spend_ratio.median() / unit_ratio.median()),
+            "tpr_share": float(mech["TPR only"]["rows"] / hh.ANY_PROMO.sum()),
             "cells": int(usable.sum()),
             "discount": float(discount_cost),
         },
@@ -609,7 +615,7 @@ def analyse(tx: pd.DataFrame, stores: pd.DataFrame) -> dict:
             "mech": mech,
             "pairwise_all_separate": all(pairwise.values()),
             "r2": float(np.corrcoef(hh.log_UNITS, hh.log_HHS)[0, 1] ** 2),
-            "one_unit_share": float((hh.UNITS / hh.HHS).round(6).eq(1).mean()),
+            "unit_lift": float((1 + fe["reach"]["point"]) * (1 + fe["depth"]["point"]) - 1),
         },
         "cost": cost,
         "basket": basket,
@@ -883,6 +889,8 @@ def build() -> None:
         "PROMO_DEPTH": pct(promo["median_depth"], 2),
         "PROMO_UNIT_RATIO": f"{promo['unit_ratio']:.2f}",
         "PROMO_SPEND_RATIO": f"{promo['spend_ratio']:.2f}",
+        "PRICE_RATIO": f"{promo['price_ratio']:.2f}",
+        "TPR_SHARE": pct(promo["tpr_share"], 1),
         "PROMO_CELLS": f"{promo['cells']:,}",
         "SPEND_GROWTH": pct(trend["SPEND"]["per_year"], 2, True),
         "SPEND_GROWTH_PLAIN": pct(trend["SPEND"]["per_year"], 2),
@@ -901,6 +909,8 @@ def build() -> None:
         "SWING_SPEND": pct(dec["SPEND"]["swing"] / 100, 1),
         "SEASON_P_UNITS": f"{dec['UNITS']['p_perm']:.3f}",
         "SEASON_P_SPEND": f"{dec['SPEND']['p_perm']:.3f}",
+        "SEASON_N_UNITS": str(dec["UNITS"]["n_extreme"]),
+        "SEASON_N_SPEND": str(dec["SPEND"]["n_extreme"]),
         "REPEAT_EXCL": str(a["repeat"]["exclude_zero"]),
         "REPEAT_BH": str(a["repeat"]["bh"]),
         "REPEAT_N": str(a["repeat"]["n"]),
@@ -914,7 +924,7 @@ def build() -> None:
         "DEPTH_HI": pct(hh["fe"]["depth"]["hi"], 1),
         "REACH_SHARE": pct(cost["reach_share"], 1),
         "REACH_PAIRED": pct(hh["d_hhs"], 1, True),
-        "ONE_UNIT_SHARE": pct(hh["one_unit_share"], 1),
+        "UNIT_LIFT": pct(hh["unit_lift"], 1, True),
         "HH_R2": pct(hh["r2"], 1),
         "HH_CELLS": f"{hh['cells']:,}",
         "COST": money(cost["overall"][0]),
@@ -923,6 +933,9 @@ def build() -> None:
         "COST_RAW": money(cost["raw"]),
         "COST_DISCOUNT": f"${cost['discount'] / 1e6:,.2f}M",
         "COST_CONC": pct(cost["concentration"], 1),
+        "COST_CELLS": f"{cost['cells']:,}",
+        "CONC_CELLS": f"{cost['conc_cells']:,}",
+        "CONC_RATIO": f"{cost['conc_ratio']:.1f}×",
         "COST_NEG": pct(cost["negative_share"], 1),
         "COST_BAG": money(cost["categories"]["BAG SNACKS"]["point"]),
         "COST_CEREAL": money(cost["categories"]["COLD CEREAL"]["point"]),
@@ -1024,13 +1037,20 @@ def build() -> None:
     print(f"  seasonality        units {dec['UNITS']['seasonal_share']:.1f}% vs trend "
           f"{dec['UNITS']['trend_share']:.1f}% · swing {dec['UNITS']['swing']:.1f}% · "
           f"perm p {dec['UNITS']['p_perm']:.4f}")
+    print(f"  permutation        units {dec['UNITS']['n_extreme']} / 2,000 · "
+          f"spend {dec['SPEND']['n_extreme']} / 2,000")
     print(f"  promotion          {promo['share_rows']:.2%} rows · depth "
           f"{promo['median_depth']:.1%} · unit ratio {promo['unit_ratio']:.2f}x · "
           f"spend ratio {promo['spend_ratio']:.2f}x · {promo['cells']:,} cells")
+    print(f"  promo mix          TPR-only {promo['tpr_share']:.1%} of promo rows "
+          f"({hh['mech']['TPR only']['rows']:,}) · price ratio {promo['price_ratio']:.2f}x")
     print(f"  reach / depth      {hh['fe']['reach']['point']:+.1%} "
           f"[{hh['fe']['reach']['lo']:+.1%}, {hh['fe']['reach']['hi']:+.1%}] / "
           f"{hh['fe']['depth']['point']:+.1%} "
           f"[{hh['fe']['depth']['lo']:+.1%}, {hh['fe']['depth']['hi']:+.1%}]")
+    print(f"  reach x depth      {hh['unit_lift']:+.1%} units = "
+          f"{1 + hh['fe']['reach']['point']:.3f}x x "
+          f"{1 + hh['fe']['depth']['point']:.3f}x")
     print(f"  mechanisms         pairwise differences all separate: "
           f"{hh['pairwise_all_separate']}")
     print(f"  cost / hh-week     {cost['overall'][0]:.2f} "
@@ -1041,7 +1061,8 @@ def build() -> None:
         print(f"    {key:24s} ${c['point']:.2f} [${c['lo']:.2f}, ${c['hi']:.2f}]")
     print(f"  category intervals  disjoint in display order: "
           f"{all(cat_ints[i]['hi'] < cat_ints[i + 1]['lo'] for i in range(len(cat_ints) - 1))}")
-    print(f"  one-unit rows      {hh['one_unit_share']:.1%}")
+    print(f"  concentration      top 5% = {cost['conc_cells']:,} pairs supply "
+          f"{cost['concentration']:.1%} ({cost['conc_ratio']:.1f}x their share)")
     print(f"  reach paired       {hh['d_hhs']:+.1%}")
     print(f"  worst-case ratio   "
           f"{hh['mech']['feature+display']['reach_lo'] / hh['mech']['TPR only']['reach_hi']:.1f}x "
@@ -1052,6 +1073,9 @@ def build() -> None:
           f"(p {basket['per_basket']['p_t']:.1e}) · units "
           f"{basket['units_per_basket']['pct']:+.2%} "
           f"(p {basket['units_per_basket']['p_t']:.1e})")
+    print(f"  payback rules      median {pb['median_rule'][0]:.2f}x "
+          f"[{pb['median_rule'][1]:.2f}, {pb['median_rule'][2]:.2f}] · "
+          f"per-cell {pb['per_cell'][0]:.2f}x · observed {pb['observed'][0]:.2f}x")
     print(f"\nwrote {OUT}")
 
 
