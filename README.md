@@ -13,10 +13,14 @@ buying household, which kind of promotion does it, and whether that price surviv
 calendar. The revenue-versus-discount ratio it used to lead with is still here, now
 reported as a range, because the crediting rule moves it across break-even.
 
+> [!TIP]
+> **First look:** [open the eight-slide briefing](https://dunnhumby-promo-presentation.vladsmertev24.workers.dev/)
+> — English and Russian in one page, no install, arrow keys to move. It makes the same
+> argument as this README, with the charts.
+
 **The short answer for a category team:** promotions buy households, not bigger
 baskets. Feature and display reach far more of them than a deeper silent discount, and
-the calendar moves weekly demand more than any trend in the panel. A slide version,
-[*Make the discount visible*](presentation/index.html), is included in the repository.
+the calendar moves weekly demand more than any trend in the panel.
 
 ![Weekly units and spend, indexed to the first week](figures/01_units_vs_spend.png)
 
@@ -130,7 +134,10 @@ Python 3.14 · pandas 3.0 · seaborn · scipy · scikit-learn, managed with `uv`
 
 [`presentation/index.html`](presentation/index.html) is the current investor briefing,
 *Make the discount visible — promotion economics*: eight slides, English and Russian in
-one self-contained file, using the same numbers and charts as the notebooks.
+one self-contained file, using the same numbers and charts as the notebooks. It is
+published at
+<https://dunnhumby-promo-presentation.vladsmertev24.workers.dev/>; the file in the
+repository is the same page.
 
 - Open the file directly in a browser — no server or install is needed to read it.
 - `←`/`→` move between slides, `L` switches language, `?lang=ru` opens the Russian deck,
