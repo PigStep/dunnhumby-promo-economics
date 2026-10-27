@@ -155,20 +155,49 @@
   /* fixed chrome */
   .progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:20;transition:width .18s linear}
   .chrome{
-    position:fixed;right:18px;bottom:14px;z-index:20;display:flex;align-items:baseline;gap:10px;
-    background:rgba(247,246,242,.88);padding:3px 8px;border-radius:2px;
+    position:fixed;right:18px;bottom:14px;z-index:20;display:flex;align-items:center;gap:11px;
+    background:rgba(255,254,251,.94);padding:5px 6px 5px 12px;border:1px solid var(--rule);border-radius:3px;
+    box-shadow:0 1px 3px rgba(23,26,23,.07);
   }
   .counter{display:flex;gap:7px;align-items:baseline;font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--faint)}
   .counter #current{color:var(--ink)}
-  .lang{display:flex;align-items:baseline;gap:2px;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em}
-  .lang button{
-    appearance:none;border:0;background:none;padding:2px 3px;border-radius:2px;
-    font:inherit;color:var(--faint);cursor:pointer;letter-spacing:inherit;
+  .lang{
+    display:flex;gap:3px;padding:2px;background:var(--bg);
+    border:1px solid var(--rule-soft);border-radius:2px;
   }
-  .lang button:hover{color:var(--ink)}
-  .lang button[aria-pressed="true"]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--accent)}
-  .lang button:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
-  .lang .sep{color:var(--rule)}
+  .lang button{
+    appearance:none;border:0;background:none;padding:4px 11px;border-radius:1px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;color:var(--muted);
+    cursor:pointer;line-height:1.3;
+  }
+  .lang button:hover{color:var(--ink);background:var(--accent-soft)}
+  .lang button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+  .lang button:focus-visible{outline:1px solid var(--accent);outline-offset:1px}
+
+  /* one-time language notice */
+  .notice{
+    position:fixed;left:50%;bottom:66px;transform:translateX(-50%);z-index:21;
+    display:flex;align-items:center;gap:14px;width:max-content;max-width:calc(100vw - 32px);
+    background:rgba(255,254,251,.97);border:1px solid var(--rule);border-radius:3px;
+    padding:9px 10px 9px 14px;box-shadow:0 2px 10px rgba(23,26,23,.10);
+    font-size:12px;line-height:1.4;color:var(--muted);
+  }
+  .notice > span{min-width:0}
+  .notice[hidden]{display:none}
+  .notice b{color:var(--ink);font-weight:600}
+  .notice-action{
+    appearance:none;border:1px solid var(--accent);background:var(--accent);color:var(--surface);
+    padding:5px 10px;border-radius:2px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+    cursor:pointer;white-space:nowrap;
+  }
+  .notice-action:hover{background:var(--ink);border-color:var(--ink)}
+  .notice-action:focus-visible{outline:1px solid var(--ink);outline-offset:2px}
+  .notice-close{
+    appearance:none;border:0;background:none;color:var(--faint);cursor:pointer;
+    font-size:15px;line-height:1;padding:2px;border-radius:2px;
+  }
+  .notice-close:hover{color:var(--ink)}
+  .notice-close:focus-visible{outline:1px solid var(--accent);outline-offset:1px}
   .hint{position:fixed;left:18px;bottom:14px;z-index:20;font-size:10px;color:var(--faint);letter-spacing:.02em}
   .hint kbd{font-family:var(--mono);font-size:9px;border:1px solid var(--rule);padding:1px 4px;border-radius:2px;background:var(--surface)}
   html[lang="ru"] .only-en{display:none}
@@ -178,7 +207,7 @@
 
   @media (max-width:980px){
     html{scroll-snap-type:none}
-    .slide{min-height:auto;padding:44px 24px 64px}
+    .slide{min-height:auto;padding:44px 24px 80px}
     .title-grid,.split,.split--chart{grid-template-columns:1fr;gap:30px}
     .hero-stat{border-left:0;border-top:1px solid var(--ink);padding:22px 0 0}
     .cards,.stats{grid-template-columns:1fr}
@@ -254,7 +283,7 @@
     body{background:#fff}
     .slide{min-height:100vh;height:100vh;page-break-after:always;break-after:page;border-bottom:0;padding:42px 54px}
     .slide:last-child{page-break-after:auto;break-after:auto}
-    .progress,.chrome,.hint{display:none}
+    .progress,.chrome,.notice,.hint{display:none}
     .card,.figure,.hero-stat{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   }
 </style>
@@ -268,10 +297,14 @@
 <div class="chrome">
   <div class="lang" role="group" aria-label="Language / Язык">
     <button type="button" data-lang="en" aria-pressed="true" title="English">EN</button>
-    <span class="sep" aria-hidden="true">/</span>
     <button type="button" data-lang="ru" aria-pressed="false" title="Русский" lang="ru">RU</button>
   </div>
   <div class="counter"><span id="current">01</span><span>/</span><span id="total">08</span></div>
+</div>
+<div class="notice" id="notice" role="status" aria-live="polite" hidden>
+  <span>This deck is also available in <b>Russian</b>.</span>
+  <button type="button" class="notice-action" data-notice-lang="ru" lang="ru">Читать по-русски</button>
+  <button type="button" class="notice-close" aria-label="Dismiss">×</button>
 </div>
 <main id="deck-en">
 
@@ -622,6 +655,7 @@
   const total = document.getElementById('total');
   const meta = document.querySelector('meta[name="description"]');
   const buttons = Array.from(document.querySelectorAll('.lang [data-lang]'));
+  const notice = document.getElementById('notice');
   const titles = {
     en: html.dataset.titleEn || document.title,
     ru: html.dataset.titleRu || document.title,
@@ -635,6 +669,7 @@
   let slides = [];
   let active = 0;
   let observer = null;
+  let noticeTimer = null;
 
   function deckSlides(code){
     return Array.from(decks[code].querySelectorAll('.slide'));
@@ -686,7 +721,7 @@
     observe();
     paint(index);
     if (opts.scroll !== false) jumpTo(active);
-    try { localStorage.setItem('deck-lang', code); } catch (err) {}
+    if (code === 'ru' && notice) notice.hidden = true;
   }
 
   buttons.forEach((button) => {
@@ -718,20 +753,37 @@
 
   const params = new URLSearchParams(window.location.search);
   const requested = params.get('lang');
-  let saved = null;
-  try { saved = localStorage.getItem('deck-lang'); } catch (err) {}
   const hash = window.location.hash.replace('#', '');
   // a shared slide link pins the language it was copied from (#s3 = EN, #s3-ru = RU),
   // but an explicit ?lang= still wins
   const hashLang = /^s\d+-ru$/.test(hash) ? 'ru' : /^s\d+$/.test(hash) ? 'en' : null;
   const initial = requested === 'ru' || requested === 'en'
     ? requested
-    : hashLang || (saved === 'ru' ? 'ru' : 'en');
+    : (hashLang || 'en');
   setLang(initial, {keepSlide: false, scroll: false});
 
   if (hash){
     const target = slides.findIndex((slide) => slide.id === hash);
     if (target >= 0){ paint(target); jumpTo(target); }
+  }
+
+  // On opening in English, point at the language switch once. The notice is
+  // dismissible, times out on its own, and never reappears after a choice.
+  if (notice){
+    const offers = notice.querySelector('[data-notice-lang]');
+    const close = notice.querySelector('.notice-close');
+    const hide = () => { notice.hidden = true; clearTimeout(noticeTimer); };
+    const show = () => {
+      if (lang !== 'en') return;
+      notice.hidden = false;
+      noticeTimer = setTimeout(hide, 12000);
+    };
+    if (offers){
+      offers.addEventListener('click', () => { hide(); setLang(offers.dataset.noticeLang); });
+    }
+    if (close) close.addEventListener('click', hide);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(); });
+    show();
   }
 })();
 </script>
