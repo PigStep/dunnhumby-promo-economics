@@ -1,0 +1,325 @@
+<!-- Russian mirror of the slides in template.html.
+
+     Same classes, same placeholder names, same slide order; only the prose and the
+     section ids differ (s1-ru … s8-ru). build_deck.py wraps this file in a hidden
+     Russian main next to the English deck and renders the charts with Russian labels.
+     Keep both files structurally in step: the build checks that the slide counts match. -->
+  <section class="slide slide--title" id="s1-ru">
+    <div class="slide-inner">
+      <div class="title-grid">
+        <div class="title-copy">
+          <div class="kicker">Экономика промо · розница США · 2009–2012</div>
+          <h1>Сделайте <span class="accent">скидку видимой.</span></h1>
+          <p class="dek">156 недель продаж из 77 продуктовых магазинов США. Листовка и выкладка привлекают куда больше покупающих домохозяйств, чем тихое снижение цены.</p>
+          <div class="title-meta">
+            <span>{{N_ROWS}} записей «магазин–товар–неделя»</span>
+            <span>{{N_WEEKS}} недель · {{N_STORES}} магазинов × {{N_UPCS}} товаров</span>
+            <span>{{N_CATEGORIES_RU}} · {{N_MSAS}} агломераций</span>
+          </div>
+        </div>
+        <aside class="hero-stat">
+          <div class="hero-value">{{MECH_FD}}</div>
+          <div class="hero-label">больше покупающих домохозяйств в недели с листовкой + выкладкой</div>
+          <div class="hero-test">против {{MECH_TPR}} от одной скидки<br>95% ДИ [{{MECH_FD_LO}}, {{MECH_FD_HI}}]</div>
+          <div class="hero-note">Охват — это покупающие домохозяйства на товар–магазин–неделю. Одно и то же домохозяйство учитывается в разные недели; идентификатора клиента нет.</div>
+        </aside>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Источник: Dunnhumby, «Breakfast at the Frat» · недельная панель «магазин × SKU» · <span class="nowrap">{{DATE_START_RU}} – {{DATE_END_RU}}</span></span>
+        <span>Октябрь 2026 · 8 слайдов · 95% интервалы показывают диапазон, согласующийся с данными</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="s2-ru">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">Рекомендация 01 · Охват</div>
+          <h2>Промо приводит домохозяйства, а не увеличивает среднюю корзину.</h2>
+        </div>
+        <div class="slide-no">02 / 08</div>
+      </div>
+      <p class="dek">На акционной неделе товар покупают на <strong class="accent">{{REACH_PLAIN}} больше домохозяйств</strong> [{{REACH_LO}}, {{REACH_HI}}], чем в неакционные недели. Каждое берёт лишь на {{DEPTH_PLAIN}} больше штук [{{DEPTH_LO}}, {{DEPTH_HI}}].</p>
+
+      <div class="split split--chart">
+        <div class="figure figure--side">
+          {{FIG_REACH}}
+          <p class="figcap">Каждый столбик сравнивает акционные недели с неакционными неделями того же товара в том же магазине. Фиксированные эффекты ячейки и недели; 95% ДИ, кластеризованный по ячейке «товар–магазин». {{HH_CELLS_RU}} минимум по 8 недель с каждой стороны.</p>
+        </div>
+        <div class="stack">
+          <div class="stat">
+            <div class="stat-value accent">{{REACH}}</div>
+            <div class="stat-label">больше купивших домохозяйств на акционной неделе</div>
+            <div class="stat-test">95% ДИ [{{REACH_LO}}, {{REACH_HI}}] · {{HH_CELLS_RU}}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{DEPTH}}</div>
+            <div class="stat-label">больше штук на купившее домохозяйство</div>
+            <div class="stat-test">95% ДИ [{{DEPTH_LO}}, {{DEPTH_HI}}] · те же пары</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{REACH_SHARE}}</div>
+            <div class="stat-label">прироста штук — за счёт большего числа покупающих домохозяйств</div>
+            <div class="stat-test">а не корзины · логарифмическая декомпозиция · R² {{HH_R2}}</div>
+          </div>
+          <div class="note"><strong>Домохозяйство-неделя — одно домохозяйство за одну неделю.</strong> Одно и то же домохозяйство может учитываться в разные недели. Это не уникальный охват и не новые клиенты. <strong>Что это значит:</strong> {{REACH}} охвата и {{DEPTH}} глубины дают {{UNIT_LIFT}} штук — растите охватом, а не корзиной.</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Охват = HHS: число домохозяйств, купивших этот UPC в этом магазине за эту неделю. 95% интервал — диапазон, согласующийся с данными. HHS объясняет {{HH_R2}} дисперсии лог-штук, поэтому разделение отчасти свойство самой метрики.</span>
+        <span>Источник: EDA §5.5</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="s3-ru">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">Рекомендация 02 · Механизм</div>
+          <h2>Охват двигают листовка и выкладка.</h2>
+        </div>
+        <div class="slide-no">03 / 08</div>
+      </div>
+      <p class="dek">Листовка и выкладка: <strong class="accent">{{MECH_FD}} покупающих домохозяйств</strong> [{{MECH_FD_LO}}, {{MECH_FD_HI}}]. Листовка — {{MECH_F}}, выкладка — {{MECH_D}}, скидка — {{MECH_TPR}} [{{MECH_TPR_LO}}, {{MECH_TPR_HI}}]. Все шесть попарных различий значимы.</p>
+
+      <div class="split split--chart">
+        <div class="figure figure--side">
+          {{FIG_MECH}}
+          <p class="figcap">Каждый столбик сравнивает недели своего механизма с неакционными неделями того же товара в том же магазине. Фиксированные эффекты ячейки и недели; 95% ДИ, кластеризованный по ячейке «товар–магазин». В строках с листовкой и выкладкой может быть и скидка: сравниваем заметное продвижение с тихим.</p>
+        </div>
+        <div class="stack">
+          <div class="stat">
+            <div class="stat-value accent">{{MECH_FD}}</div>
+            <div class="stat-label">больше покупающих домохозяйств в недели с листовкой + выкладкой</div>
+            <div class="stat-test">95% ДИ [{{MECH_FD_LO}}, {{MECH_FD_HI}}] · {{MECH_FD_ROWS}} строк</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{MECH_TPR}}</div>
+            <div class="stat-label">больше покупающих домохозяйств от одной скидки</div>
+            <div class="stat-test">95% ДИ [{{MECH_TPR_LO}}, {{MECH_TPR_HI}}] · {{MECH_TPR_ROWS}} строк — самый частый механизм</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value accent">{{MECH_WORST_RATIO}}</div>
+            <div class="stat-label">больше охвата, чем у скидки, даже на нижней границе</div>
+            <div class="stat-test">{{MECH_FD_LO}} нижняя граница против {{MECH_TPR_HI}} верхней · отношение {{MECH_WORST_RATIO}}</div>
+          </div>
+          <div class="note"><strong>Скидку оставьте для распродажи остатков.</strong> Это самый слабый способ купить охват. <strong>Читайте прирост как связь:</strong> сети планируют акции, когда ждут спроса; фиксированные эффекты недели и товара убирают календарь, но не этот выбор. Причинность покажет только контрольная группа. <strong>Что это значит:</strong> платите за заметность, а не за более глубокую тихую скидку.</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Листовка = реклама в каталоге сети, выкладка = выкладка в зале, только скидка = снижение цены без них. Механизмы взаимоисключающие; в попарных сравнениях — кластеризованные ошибки.</span>
+        <span>Источник: EDA §5.5</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="s4-ru">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">Рекомендация 03 · Экономика промо</div>
+          <h2>Промо обменивает цену на штуки.</h2>
+        </div>
+        <div class="slide-no">04 / 08</div>
+      </div>
+      <p class="dek">{{PROMO_SHARE}} наблюдений «товар–магазин–неделя» — акционные, медианная скидка {{PROMO_DEPTH}}. Акционная неделя даёт <strong class="accent">{{PROMO_UNIT_RATIO}}× штук</strong> за {{PROMO_SPEND_RATIO}}× выручки. Разрыв — это цена: {{PROMO_UNIT_RATIO}}× штук × {{PRICE_RATIO}}× цены ≈ {{PROMO_SPEND_RATIO}}× выручки.</p>
+
+      <div class="split split--chart">
+        <div class="figure figure--side">
+          {{FIG_UNIT_SPEND}}
+          <p class="figcap">Медианная акционная неделя против неакционных недель того же товара в том же магазине, {{PROMO_CELLS}} парных ячеек. Штуки и выручка — медианы; разрыв — это скидка.</p>
+        </div>
+        <div class="stack">
+          <div class="stat">
+            <div class="stat-value accent">{{PROMO_SHARE}}</div>
+            <div class="stat-label">наблюдений «товар–магазин–неделя» — акционные</div>
+            <div class="stat-test">медианная глубина {{PROMO_DEPTH}}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{PROMO_UNIT_RATIO}}×</div>
+            <div class="stat-label">штук на акционной неделе против своих неакционных</div>
+            <div class="stat-test">выручка {{PROMO_SPEND_RATIO}}× · {{PROMO_CELLS}} парных ячеек</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{TPR_SHARE}}</div>
+            <div class="stat-label">акционных недель — тихие скидки</div>
+            <div class="stat-test">{{MECH_TPR_ROWS}} строк · прирост охвата всего {{MECH_TPR}} [{{MECH_TPR_LO}}, {{MECH_TPR_HI}}]</div>
+          </div>
+          <div class="note"><strong>Экономика промо-недели:</strong> {{PROMO_UNIT_RATIO}}× штук и {{PROMO_SPEND_RATIO}}× выручки — реализованная цена ниже на {{PROMO_PRICE_DROP}}. Это результат по объёму и выручке, а не по прибыли. По валовой прибыли промо даёт прирост только при базовой марже выше {{PROMO_GP_BREAKEVEN}}; ниже — выручка растёт, а прибыль размывается. <strong>Что это значит:</strong> нужны маржа и дополнительные затраты, чтобы принять решение.</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Акционные недели сравниваются с неакционными неделями той же ячейки. Отношения по штукам и выручке — медианы по {{PROMO_CELLS}} ячейкам; полей затрат и маржи нет. Окупаемость по трём правилам учёта: {{PB_MEDIAN}}× / {{PB_CELL}}× / {{PB_OBS}}× — это не прибыль.</span>
+        <span>Источник: EDA §5.2</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="s5-ru">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">Рекомендация 04 · Распределение</div>
+          <h2>Покупайте охват там, где он дешевле.</h2>
+        </div>
+        <div class="slide-no">05 / 08</div>
+      </div>
+      <p class="dek">За ту же скидку снеки в пакетах дают <strong class="accent">{{COST_RATIO}} больше дополнительных домохозяйств-недель</strong>, чем замороженная пицца. Интервалы четырёх категорий не пересекаются.</p>
+
+      <div class="split split--chart">
+        <div class="figure figure--side">
+          {{FIG_COST}}
+          <p class="figcap">95% интервалы кластерного бутстрэпа по парам «товар–магазин». С поправкой на календарь: неакционная база каждой пары масштабируется на сезонный индекс тех недель, когда она фактически шла по акции. Цена = скидка на дополнительное домохозяйство-неделю.</p>
+        </div>
+        <div class="stack">
+          <div class="stat">
+            <div class="stat-value accent">{{COST_RATIO}}</div>
+            <div class="stat-label">больше охвата в снеках, чем в замороженной пицце, за ту же скидку</div>
+            <div class="stat-test">{{COST_BAG}} против {{COST_PIZZA}} за дополнительное домохозяйство-неделю</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">4 / 4</div>
+            <div class="stat-label">интервалы категорий не пересекаются</div>
+            <div class="stat-test">{{COST_BAG}} · {{COST_CEREAL}} · {{COST_ORAL}} · {{COST_PIZZA}}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{COST_CONC}}</div>
+            <div class="stat-label">дополнительных домохозяйств-недель дают 5% лучших пар</div>
+            <div class="stat-test">{{CONC_CELLS}} из {{COST_CELLS}} пар · {{COST_NEG}} пар отрицательны</div>
+          </div>
+          <div class="note"><strong>{{COST}} — среднее, взвешенное по объёму, а не типичный магазин.</strong> Пять процентов пар дают {{COST_CONC}} охвата — {{CONC_RATIO}} их доли. <strong>Что это значит:</strong> выбирайте пары с большим объёмом; в остальных ожидайте цену выше средней.</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Цена = отданная скидка ÷ дополнительные домохозяйства-недели с поправкой на календарь. Кластерный бутстрэп пересэмплирует пары «товар–магазин» (2 000 итераций), а не строки. Это затрата, а не отдача: поля маржи нет.</span>
+        <span>Источник: EDA §5.5</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide" id="s6-ru">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">Рекомендация 05 · Календарь</div>
+          <h2>Сезонность важна. Проверяйте календарь до теста.</h2>
+        </div>
+        <div class="slide-no">06 / 08</div>
+      </div>
+      <p class="dek"><strong>Что это значит:</strong> пик выше провала на {{SWING_UNITS}} — сравнивайте похожие недели или проводите тест круглый год. Прирост охвата это выдерживает: {{REACH}} с эффектами недели против {{REACH_PAIRED}} в парном сравнении.</p>
+
+      <div class="split split--chart">
+        <div class="figure figure--side">
+          {{FIG_SEASON}}
+          <p class="figcap">Сезонная компонента недельного лог-ряда, осреднённая по фазам за три цикла. Линии — % выше или ниже подогнанного тренда; панель начинается в середине января.</p>
+        </div>
+        <div class="stack">
+          <div class="stat">
+            <div class="stat-value accent">{{SWING_UNITS}}</div>
+            <div class="stat-label">пиковые недели выше провальных, штуки</div>
+            <div class="stat-test">у выручки — {{SWING_SPEND}}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">p = {{SEASON_P_UNITS}}</div>
+            <div class="stat-label">вероятность такой картины, если недели случайны</div>
+            <div class="stat-test">{{SEASON_N_UNITS}} из 2 000 перемешиваний · выручка p = {{SEASON_P_SPEND}}</div>
+          </div>
+          <div class="note"><strong>Что мы измеряем:</strong> акции товара против его неакционных недель с убранным календарём — это связь, не причинный эффект. <strong>Почему это важно:</strong> сезонность объясняет {{SEASON_UNITS}} дисперсии недельных штук, тренд — {{TREND_UNITS}}. Повторяемость: {{REPEAT_EXCL}} из {{REPEAT_N}} когорт, {{REPEAT_BH}} после поправки; ориентируйтесь на среднюю форму.</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Аддитивная декомпозиция логарифмов недельных итогов (log1p), среднее за 52 недели. Перестановочный тест: 2 000 перестановок 156 недель. Повторяемость: z-Фишера, поправка Бенджамини–Хохберга, {{REPEAT_N}} страт.</span>
+        <span>Источник: EDA §3–§5.5</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide slide--dense" id="s7-ru">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">Рекомендация 06 · База</div>
+          <h2>Не рассчитывайте на рост объёма.</h2>
+        </div>
+        <div class="slide-no">07 / 08</div>
+      </div>
+      <p class="dek">Недельная выручка росла на <strong class="accent">{{SPEND_GROWTH_PLAIN}} в год</strong> (p = {{SPEND_P_HAC}} HAC, {{SPEND_P_ADJ}} с поправкой на сезонность, {{SPEND_P_MK}} Манн–Кендалл). Штуки — нет: {{UNITS_GROWTH}} (p = {{UNITS_P_HAC}}, {{UNITS_P_ADJ}}, {{UNITS_P_MK}}).</p>
+
+      <div class="figure">
+        {{FIG_TREND}}
+        <p class="figcap">Недельные итоги проиндексированы к первой неделе. Бледные линии — исходный ряд, жирные — центрированное среднее за 13 недель. Линия тренда есть только у выручки: наклон штук неотличим от нуля, как только поглощён 52-недельный цикл. Базовый сценарий: объём не растёт, выручка — за счёт цены; 2012 — одна неделя.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value accent">{{SPEND_GROWTH}} / год</div>
+          <div class="stat-label">недельная выручка</div>
+          <div class="stat-test">p = {{SPEND_P_HAC}} HAC(4) · {{SPEND_P_ADJ}} с поправкой на сезонность · {{SPEND_P_MK}} Манн–Кендалл</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">{{UNITS_GROWTH}} / год</div>
+          <div class="stat-label">недельные штуки</div>
+          <div class="stat-test">p = {{UNITS_P_HAC}} · {{UNITS_P_ADJ}} · {{UNITS_P_MK}} — тренда не видно</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">{{BASKET_SPEND_PCT}}</div>
+          <div class="stat-label">выручка на корзину, 2009 → 2011, парно по магазинам</div>
+          <div class="stat-test">p = {{BASKET_SPEND_P}} · штук на корзину {{BASKET_UNITS_PCT}} (p = {{BASKET_UNITS_P}})</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Тесты тренда: МНК с ошибками Ньюи–Уэста HAC(4) (учитывают недельную автокорреляцию), МНК с 51 фиктивной переменной «неделя года», Манн–Кендалл (ранговый тест). Все три согласны. Корзина: парный t-тест и Уилкоксон по медианам 2009 и 2011 каждого магазина; n = {{N_STORES}} магазинов.</span>
+        <span>Источник: EDA §2, §5.3</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="slide slide--dense" id="s8-ru">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">07 · Проверка</div>
+          <h2>Снимите риски до масштабирования.</h2>
+        </div>
+        <div class="slide-no">08 / 08</div>
+      </div>
+      <p class="dek">Панель умеет измерять охват. Она не доказывает новых покупателей, прибыль или распродажу остатков.</p>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-no">01 / КОНТРОЛЬ</div>
+          <h3>Проверьте листовку с выкладкой против тихой скидки.</h3>
+          <p>Акции планируются, а не рандомизируются. Контрольная группа или геотест превратили бы <strong>охват {{REACH}}</strong> в причинную величину.</p>
+        </div>
+        <div class="card">
+          <div class="card-no">02 / МАРЖА</div>
+          <h3>Получите маржинальную прибыль и себестоимость.</h3>
+          <p>Поля маржи здесь нет: товар с маржой 20% и с маржой 60% выглядят одинаково. Скидкам для распродажи остатков нужны ещё и данные о запасах.</p>
+        </div>
+        <div class="card">
+          <div class="card-no">03 / КЛЮЧ КЛИЕНТА</div>
+          <h3>Свяжите домохозяйства между неделями.</h3>
+          <p>Без ключа охват не разложить на новых, повторных и переключившихся. Охват — не CAC, и LTV здесь нет.</p>
+        </div>
+      </div>
+
+      <div class="panel-summary">
+        <div>
+          <h3>Что такое панель</h3>
+          <p><strong>{{N_ROWS}}</strong> записей «магазин–товар–неделя» · <strong>{{N_WEEKS}}</strong> недель · <strong>{{N_STORES}}</strong> магазинов × <strong>{{N_UPCS}}</strong> товаров · {{N_CATEGORIES_RU}} · {{N_MSAS}} агломераций.</p>
+        </div>
+        <div>
+          <h3>Чего она не скажет</h3>
+          <p>Нет ключа клиента. Нет полей затрат, маржи и запасов. Нет рандомизированного назначения акций.</p>
+        </div>
+      </div>
+
+      <div class="closing"><strong>Для охвата — заметность. Для распродажи — цена.</strong> Эта панель доказывает первое; второе нужно проверять тестом.</div>
+      <div class="slide-footer">
+        <span class="source">95% интервал — диапазон, согласующийся с данными; p — вероятность такого результата, если эффекта нет. Методы: HAC(4), МНК с поправкой на сезонность, Манн–Кендалл; перестановочный тест на 2 000 перемешиваний; z-преобразование Фишера с поправкой Бенджамини–Хохберга; фиксированные эффекты ячейки и недели с кластеризованными по ячейке ошибками; кластерный бутстрэп по парам «товар–магазин». Полный аудит в <span class="mono">notebooks/EDA.ipynb</span>.</span>
+        <span>Октябрь 2026</span>
+      </div>
+    </div>
+  </section>

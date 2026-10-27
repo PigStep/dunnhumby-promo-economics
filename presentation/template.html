@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="en"
+      data-title-en="Make the discount visible — promotion economics"
+      data-title-ru="Сделайте скидку видимой — экономика промо"
+      data-desc-en="Investor briefing: feature and display reach far more buying households than silent price cuts. 77 stores, 55 UPCs, 156 weeks, 2009–2012."
+      data-desc-ru="Брифинг для инвестора: листовка и выкладка привлекают куда больше покупающих домохозяйств, чем тихие скидки. 77 магазинов, 55 UPC, 156 недель, 2009–2012.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Investor briefing: feature and display reach far more buying households than silent price cuts. 77 stores, 55 UPCs, 156 weeks, 2009–2012.">
+<title>Make the discount visible — promotion economics</title>
+<style>
+  :root{
+    --bg:#f7f6f2;
+    --surface:#fffefb;
+    --ink:#171a17;
+    --muted:#6b716a;
+    --faint:#9aa099;
+    --rule:#dedbd2;
+    --rule-soft:#ece9e1;
+    --accent:#1f6b56;
+    --accent-soft:#e8f0ec;
+    --clay:#9f4a3d;
+    --amber:#a97722;
+    --blue:#486b80;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    font-feature-settings:"kern" 1,"liga" 1;
+  }
+  ::selection{background:var(--accent-soft);color:var(--ink)}
+  .slide{
+    min-height:100svh;display:flex;align-items:center;
+    padding:clamp(24px,3.6vw,52px) clamp(24px,5.2vw,80px);
+    border-bottom:1px solid var(--rule);scroll-snap-align:start;position:relative;
+  }
+  .slide--title{background:var(--surface);border-bottom-color:var(--rule)}
+  .slide--dense{padding-top:clamp(20px,2.8vw,42px);padding-bottom:clamp(20px,2.8vw,42px)}
+  .slide-inner{width:min(1280px,100%);margin:0 auto}
+  .slide-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+  .slide-no{font-size:11px;letter-spacing:.12em;color:var(--faint);font-variant-numeric:tabular-nums;white-space:nowrap;padding-top:3px}
+  .kicker{
+    display:flex;align-items:center;gap:12px;font-size:10.5px;letter-spacing:.17em;
+    text-transform:uppercase;color:var(--muted);font-weight:600;
+  }
+  .kicker::before{content:"";display:block;width:26px;height:1px;background:var(--accent)}
+  h1,h2,h3,p{margin:0}
+  h1{
+    margin:24px 0 22px;font-size:clamp(42px,5.7vw,78px);line-height:.98;
+    letter-spacing:-.045em;font-weight:500;max-width:13ch;
+  }
+  h1 .accent{color:var(--accent)}
+  h2{
+    margin:15px 0 14px;font-size:clamp(29px,3.45vw,47px);line-height:1.06;
+    letter-spacing:-.035em;font-weight:500;max-width:40ch;
+  }
+  h3{font-size:14px;line-height:1.3;letter-spacing:-.01em;font-weight:600}
+  .dek{font-size:clamp(15px,1.25vw,18px);line-height:1.55;color:var(--muted);max-width:70ch}
+  .dek strong{color:var(--ink);font-weight:600}
+  .accent{color:var(--accent)}
+  .mono{font-family:var(--mono);font-size:.9em}
+  .nowrap{white-space:nowrap}
+  .slide-footer{
+    display:flex;justify-content:space-between;gap:18px;align-items:baseline;
+    margin-top:clamp(14px,1.8vw,20px);padding-top:11px;border-top:1px solid var(--rule-soft);
+    font-size:10.5px;line-height:1.45;color:var(--faint);letter-spacing:.01em;
+  }
+  .slide-footer .source{max-width:112ch}
+
+  /* title */
+  .title-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:clamp(32px,5vw,72px);align-items:center}
+  .title-copy .dek{max-width:53ch}
+  .title-meta{
+    display:flex;gap:18px;flex-wrap:wrap;margin-top:38px;padding-top:14px;
+    border-top:1px solid var(--rule);font-size:11px;color:var(--faint);
+  }
+  .hero-stat{border-left:1px solid var(--ink);padding:4px 0 4px clamp(22px,3vw,36px)}
+  .hero-value{
+    font-size:clamp(66px,8.4vw,116px);line-height:.86;letter-spacing:-.065em;
+    font-weight:500;font-variant-numeric:tabular-nums;color:var(--ink);
+  }
+  .hero-label{margin-top:18px;font-size:16px;line-height:1.4;max-width:19ch;color:var(--ink)}
+  .hero-test{margin-top:12px;font-family:var(--mono);font-size:11px;line-height:1.55;color:var(--muted)}
+  .hero-note{margin-top:22px;padding-top:12px;border-top:1px solid var(--rule);font-size:11.5px;line-height:1.55;color:var(--faint);max-width:30ch}
+
+  /* layout */
+  .split{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(280px,.82fr);gap:clamp(30px,4.4vw,64px);align-items:center;margin-top:clamp(18px,2.4vw,30px)}
+  .split--chart{grid-template-columns:minmax(0,1.12fr) minmax(290px,.88fr)}
+  .panel-layout{margin-top:clamp(24px,3.2vw,40px);align-items:start}
+  .stack{display:flex;flex-direction:column;gap:20px}
+  .note{font-size:12px;line-height:1.55;color:var(--muted);border-top:1px solid var(--rule);padding-top:12px}
+  .note strong{color:var(--ink);font-weight:600}
+
+  /* panel stats */
+  .panel-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--ink)}
+  .panel-cell{padding:20px 22px 18px 0;border-bottom:1px solid var(--rule)}
+  .panel-cell:nth-child(odd){border-right:1px solid var(--rule);padding-right:24px}
+  .panel-cell:nth-child(even){padding-left:24px}
+  .panel-value{font-size:clamp(28px,3.2vw,43px);line-height:1;letter-spacing:-.045em;font-variant-numeric:tabular-nums;font-weight:500}
+  .panel-label{margin-top:10px;font-size:12px;line-height:1.4;color:var(--muted);max-width:24ch}
+  .limits{display:flex;flex-direction:column;border-top:1px solid var(--ink)}
+  .limit{display:grid;grid-template-columns:26px 1fr;gap:12px;padding:15px 0;border-bottom:1px solid var(--rule)}
+  .limit-no{font-family:var(--mono);font-size:10px;color:var(--faint);padding-top:2px}
+  .limit p{margin-top:5px;font-size:12px;line-height:1.5;color:var(--muted)}
+  .strip{
+    margin-top:clamp(24px,3vw,34px);padding-top:13px;border-top:1px solid var(--rule);
+    display:flex;gap:24px;justify-content:space-between;flex-wrap:wrap;font-size:11.5px;line-height:1.5;color:var(--muted)
+  }
+  .strip strong{color:var(--ink);font-weight:600}
+
+  /* statistics */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,34px);margin-top:clamp(14px,1.8vw,20px)}
+  .stat{border-top:1px solid var(--ink);padding-top:12px}
+  .stat-value{font-size:clamp(27px,3.1vw,43px);line-height:1;letter-spacing:-.045em;font-variant-numeric:tabular-nums;font-weight:500}
+  .stat-value.accent{color:var(--accent)}
+  .stat-label{margin-top:9px;font-size:12px;line-height:1.45;color:var(--muted);max-width:28ch}
+  .stat-test{margin-top:7px;font-family:var(--mono);font-size:10px;line-height:1.5;color:var(--faint)}
+
+  /* figures */
+  .figure{margin-top:clamp(14px,1.9vw,22px);border-top:1px solid var(--ink);padding-top:12px}
+  .figure svg{display:block;width:100%;height:auto}
+  .figcap{margin-top:9px;font-size:10.5px;line-height:1.5;color:var(--faint);max-width:100ch}
+  .figure--side{margin-top:0}
+
+  /* slide 8 cards */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:clamp(18px,2.3vw,28px)}
+  .card{background:var(--surface);border:1px solid var(--rule);padding:16px 18px 15px}
+  .card-no{font-family:var(--mono);font-size:10px;color:var(--faint)}
+  .card h3{margin-top:10px;font-size:15px;line-height:1.25}
+  .card p{margin-top:8px;font-size:11.5px;line-height:1.5;color:var(--muted)}
+  .card p strong{color:var(--ink);font-weight:600}
+  .closing{
+    margin-top:clamp(18px,2.2vw,26px);padding-top:13px;border-top:1px solid var(--rule);
+    font-size:13px;line-height:1.5;color:var(--muted)
+  }
+  .closing strong{color:var(--ink);font-weight:600}
+
+  /* final slide panel summary */
+  .panel-summary{
+    display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(22px,3.2vw,48px);
+    margin-top:clamp(18px,2.3vw,28px);padding-top:13px;border-top:1px solid var(--rule);
+  }
+  .panel-summary h3{
+    font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--faint);font-weight:600;
+  }
+  .panel-summary p{margin-top:7px;font-size:11.5px;line-height:1.5;color:var(--muted)}
+  .panel-summary strong{color:var(--ink);font-weight:600}
+
+  /* fixed chrome */
+  .progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--accent);z-index:20;transition:width .18s linear}
+  .chrome{
+    position:fixed;right:18px;bottom:14px;z-index:20;display:flex;align-items:center;gap:11px;
+    background:rgba(255,254,251,.94);padding:5px 6px 5px 12px;border:1px solid var(--rule);border-radius:3px;
+    box-shadow:0 1px 3px rgba(23,26,23,.07);
+  }
+  .counter{display:flex;gap:7px;align-items:baseline;font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--faint)}
+  .counter #current{color:var(--ink)}
+  .lang{
+    display:flex;gap:3px;padding:2px;background:var(--bg);
+    border:1px solid var(--rule-soft);border-radius:2px;
+  }
+  .lang button{
+    appearance:none;border:0;background:none;padding:4px 11px;border-radius:1px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;color:var(--muted);
+    cursor:pointer;line-height:1.3;
+  }
+  .lang button:hover{color:var(--ink);background:var(--accent-soft)}
+  .lang button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+  .lang button:focus-visible{outline:1px solid var(--accent);outline-offset:1px}
+
+  /* one-time language notice */
+  .notice{
+    position:fixed;left:50%;bottom:66px;transform:translateX(-50%);z-index:21;
+    display:flex;align-items:center;gap:14px;width:max-content;max-width:calc(100vw - 32px);
+    background:rgba(255,254,251,.97);border:1px solid var(--rule);border-radius:3px;
+    padding:9px 10px 9px 14px;box-shadow:0 2px 10px rgba(23,26,23,.10);
+    font-size:12px;line-height:1.4;color:var(--muted);
+  }
+  .notice > span{min-width:0}
+  .notice[hidden]{display:none}
+  .notice b{color:var(--ink);font-weight:600}
+  .notice-action{
+    appearance:none;border:1px solid var(--accent);background:var(--accent);color:var(--surface);
+    padding:5px 10px;border-radius:2px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+    cursor:pointer;white-space:nowrap;
+  }
+  .notice-action:hover{background:var(--ink);border-color:var(--ink)}
+  .notice-action:focus-visible{outline:1px solid var(--ink);outline-offset:2px}
+  .notice-close{
+    appearance:none;border:0;background:none;color:var(--faint);cursor:pointer;
+    font-size:15px;line-height:1;padding:2px;border-radius:2px;
+  }
+  .notice-close:hover{color:var(--ink)}
+  .notice-close:focus-visible{outline:1px solid var(--accent);outline-offset:1px}
+  .hint{position:fixed;left:18px;bottom:14px;z-index:20;font-size:10px;color:var(--faint);letter-spacing:.02em}
+  .hint kbd{font-family:var(--mono);font-size:9px;border:1px solid var(--rule);padding:1px 4px;border-radius:2px;background:var(--surface)}
+  html[lang="ru"] .only-en{display:none}
+  .only-ru{display:none}
+  html[lang="ru"] .only-ru{display:inline}
+  main[hidden]{display:none}
+
+  @media (max-width:980px){
+    html{scroll-snap-type:none}
+    .slide{min-height:auto;padding:44px 24px 80px}
+    .title-grid,.split,.split--chart{grid-template-columns:1fr;gap:30px}
+    .hero-stat{border-left:0;border-top:1px solid var(--ink);padding:22px 0 0}
+    .cards,.stats{grid-template-columns:1fr}
+    .panel-summary{grid-template-columns:1fr}
+    .panel-grid{border-top:1px solid var(--ink)}
+    .panel-cell:nth-child(odd){border-right:0;padding-right:0}
+    .panel-cell:nth-child(even){padding-left:0}
+    .hint{display:none}
+    h1{max-width:15ch}
+    .slide-footer{flex-direction:column;gap:6px}
+  }
+
+  @media (max-height:840px) and (min-width:981px){
+    .slide{padding:24px 48px}
+    .slide--dense{padding:18px 48px}
+    h1{font-size:clamp(38px,4.9vw,62px);margin:16px 0 14px}
+    h2{font-size:clamp(26px,2.9vw,38px);margin:9px 0 8px;line-height:1.04}
+    .dek{font-size:14px;line-height:1.45}
+    .kicker{font-size:9.5px}
+    .slide-head{gap:18px}
+    .split{margin-top:16px;gap:32px}
+    .panel-layout{margin-top:18px}
+    .panel-cell{padding:13px 18px 12px 0}
+    .panel-value{font-size:34px}
+    .panel-label{font-size:11px;margin-top:7px}
+    .limit{padding:10px 0}
+    .limit p{font-size:11px;margin-top:4px}
+    .strip{margin-top:16px;padding-top:9px;font-size:10.5px}
+    .figure{margin-top:14px;padding-top:8px}
+    .figcap{font-size:9.5px;margin-top:6px;line-height:1.4}
+    .stats{margin-top:14px;gap:20px}
+    .stat{padding-top:8px}
+    .stat-value{font-size:30px}
+    .stat-label{font-size:11px;margin-top:6px;line-height:1.35}
+    .stat-test{font-size:8.8px;margin-top:5px;line-height:1.4}
+    .stack{gap:11px}
+    .note{font-size:10.8px;line-height:1.45;padding-top:8px}
+    .slide-footer{margin-top:12px;padding-top:7px;font-size:9px;line-height:1.4}
+    .cards{margin-top:14px;gap:12px}
+    .card{padding:12px 14px 11px}
+    .card h3{font-size:13px;margin-top:7px}
+    .card p{font-size:10.5px;line-height:1.4;margin-top:5px}
+    .closing{margin-top:12px;padding-top:8px;font-size:11.5px}
+    .panel-summary{margin-top:12px;padding-top:9px;gap:24px}
+    .panel-summary h3{font-size:9.5px}
+    .panel-summary p{font-size:10.5px;line-height:1.4;margin-top:5px}
+    .hero-value{font-size:clamp(60px,7vw,92px)}
+    .hero-label{font-size:14px;margin-top:12px}
+    .hero-note{font-size:10.5px;margin-top:14px}
+    .title-meta{margin-top:22px}
+  }
+  @media (max-height:740px) and (min-width:981px){
+    .slide{padding:16px 42px}
+    .slide--dense{padding:12px 42px}
+    h2{font-size:clamp(23px,2.5vw,32px)}
+    .dek{font-size:12.5px}
+    .figure{margin-top:10px}
+    .stats{margin-top:10px}
+    .stat-value{font-size:26px}
+    .slide-footer{margin-top:8px}
+    .stack{gap:8px}
+    .note{font-size:10px;padding-top:6px}
+    .cards{margin-top:10px}
+    .card{padding:10px 12px}
+    .closing{margin-top:8px;font-size:10.5px}
+    .panel-summary{margin-top:8px;padding-top:6px}
+    .panel-summary p{font-size:10px;line-height:1.35}
+  }
+
+  @media print{
+    @page{size:16.667in 9.375in;margin:0}
+    html{scroll-snap-type:none}
+    body{background:#fff}
+    .slide{min-height:100vh;height:100vh;page-break-after:always;break-after:page;border-bottom:0;padding:42px 54px}
+    .slide:last-child{page-break-after:auto;break-after:auto}
+    .progress,.chrome,.notice,.hint{display:none}
+    .card,.figure,.hero-stat{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="bar"></div>
+<div class="hint">
+  <span class="only-en"><kbd>←</kbd> <kbd>→</kbd> to navigate · <kbd>L</kbd> language</span>
+  <span class="only-ru"><kbd>←</kbd> <kbd>→</kbd> — навигация · <kbd>L</kbd> — язык</span>
+</div>
+<div class="chrome">
+  <div class="lang" role="group" aria-label="Language / Язык">
+    <button type="button" data-lang="en" aria-pressed="true" title="English">EN</button>
+    <button type="button" data-lang="ru" aria-pressed="false" title="Русский" lang="ru">RU</button>
+  </div>
+  <div class="counter"><span id="current">01</span><span>/</span><span id="total">08</span></div>
+</div>
+<div class="notice" id="notice" role="status" aria-live="polite" hidden>
+  <span>This deck is also available in <b>Russian</b>.</span>
+  <button type="button" class="notice-action" data-notice-lang="ru" lang="ru">Читать по-русски</button>
+  <button type="button" class="notice-close" aria-label="Dismiss">×</button>
+</div>
+<main id="deck-en">
+
+  <!-- 1 -->
+  <section class="slide slide--title" id="s1">
+    <div class="slide-inner">
+      <div class="title-grid">
+        <div class="title-copy">
+          <div class="kicker">Promotion economics · US grocery · 2009–2012</div>
+          <h1>Make the <span class="accent">discount visible.</span></h1>
+          <p class="dek">156 weeks of sales from 77 US grocery stores. Feature and display reach far more buying households than a silent price cut.</p>
+          <div class="title-meta">
+            <span>{{N_ROWS}} store–product–week records</span>
+            <span>{{N_WEEKS}} weeks · {{N_STORES}} stores × {{N_UPCS}} products</span>
+            <span>{{N_CATEGORIES}} categories · {{N_MSAS}} metro areas</span>
+          </div>
+        </div>
+        <aside class="hero-stat">
+          <div class="hero-value">{{MECH_FD}}</div>
+          <div class="hero-label">more buying households in feature + display weeks</div>
+          <div class="hero-test">vs {{MECH_TPR}} from a price cut alone<br>95% CI [{{MECH_FD_LO}}, {{MECH_FD_HI}}]</div>
+          <div class="hero-note">Reach counts buying households per store–item–week — a household-week. The same household can appear in several weeks; the panel has no customer ID.</div>
+        </aside>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Source: Dunnhumby, “Breakfast at the Frat” · weekly store × SKU panel · {{DATE_START}}–{{DATE_END}}</span>
+        <span>Prepared October 2026 · 8 slides · 95% intervals show the range consistent with the data</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide" id="s2">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">Recommendation 01 · Reach</div>
+          <h2>Promos bring households, not bigger baskets.</h2>
+        </div>
+        <div class="slide-no">02 / 08</div>
+      </div>
+      <p class="dek">In a promo week, <strong class="accent">{{REACH_PLAIN}} more households buy the item</strong> in that store than in the same store’s non-promo weeks [{{REACH_LO}}, {{REACH_HI}}]. Each buyer takes only {{DEPTH_PLAIN}} more units [{{DEPTH_LO}}, {{DEPTH_HI}}].</p>
+
+      <div class="split split--chart">
+        <div class="figure figure--side">
+          {{FIG_REACH}}
+          <p class="figcap">Each bar compares promo weeks with the same product–store’s non-promo weeks. Cell and week fixed effects; 95% CI clustered on the product–store cell. {{HH_CELLS}} pairs with at least 8 weeks on each side.</p>
+        </div>
+        <div class="stack">
+          <div class="stat">
+            <div class="stat-value accent">{{REACH}}</div>
+            <div class="stat-label">more buying households in a promo week</div>
+            <div class="stat-test">95% CI [{{REACH_LO}}, {{REACH_HI}}] · {{HH_CELLS}} pairs</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{DEPTH}}</div>
+            <div class="stat-label">more units per buying household</div>
+            <div class="stat-test">95% CI [{{DEPTH_LO}}, {{DEPTH_HI}}] · same pairs</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{REACH_SHARE}}</div>
+            <div class="stat-label">of the unit lift is more buying households</div>
+            <div class="stat-test">not bigger baskets · log decomposition · R² {{HH_R2}}</div>
+          </div>
+          <div class="note"><strong>A household-week is one household buying in one week.</strong> The same household can appear in several weeks. It is not unique reach, new customers, or CAC. <strong>What this means:</strong> {{REACH}} more buying households and {{DEPTH}} more units each compound to {{UNIT_LIFT}} units — grow household reach; the depth lever is about 5%.</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Reach = HHS, households buying that UPC in that store-week. 95% interval = range consistent with the data. HHS explains {{HH_R2}} of log-unit variance, so the {{REACH_SHARE}} split is partly a property of the metric.</span>
+        <span>Source: EDA §5.5</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide" id="s3">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">Recommendation 02 · Mechanism</div>
+          <h2>Feature + display is the reach lever.</h2>
+        </div>
+        <div class="slide-no">03 / 08</div>
+      </div>
+      <p class="dek">Advertising the item and putting it on display lifts the count of buying households by <strong class="accent">{{MECH_FD_PLAIN}}</strong> [{{MECH_FD_LO}}, {{MECH_FD_HI}}]. Feature alone lifts it by {{MECH_F_PLAIN}}, display alone by {{MECH_D_PLAIN}}, and a price cut alone by {{MECH_TPR_PLAIN}} [{{MECH_TPR_LO}}, {{MECH_TPR_HI}}]. All six pairwise differences separate.</p>
+
+      <div class="split split--chart">
+        <div class="figure figure--side">
+          {{FIG_MECH}}
+          <p class="figcap">Each bar compares a mechanism’s weeks with the same product–store’s non-promo weeks. Cell and week fixed effects; 95% CI clustered on the product–store cell. Feature/display rows may also carry a price cut; the comparison is communicated vs silent.</p>
+        </div>
+        <div class="stack">
+          <div class="stat">
+            <div class="stat-value accent">{{MECH_FD}}</div>
+            <div class="stat-label">more buying households in feature + display weeks</div>
+            <div class="stat-test">95% CI [{{MECH_FD_LO}}, {{MECH_FD_HI}}] · {{MECH_FD_ROWS}} rows</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{MECH_TPR}}</div>
+            <div class="stat-label">more buying households from a price cut alone</div>
+            <div class="stat-test">95% CI [{{MECH_TPR_LO}}, {{MECH_TPR_HI}}] · {{MECH_TPR_ROWS}} rows — the most common mechanism</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value accent">{{MECH_WORST_RATIO}}</div>
+            <div class="stat-label">more reach than a price cut, even at the pessimistic end</div>
+            <div class="stat-test">{{MECH_FD_LO}} lower bound vs {{MECH_TPR_HI}} upper bound · {{MECH_WORST_RATIO}} ratio</div>
+          </div>
+          <div class="note"><strong>Keep TPR for clearance.</strong> It is the weakest way to buy reach. <strong>Read the lift as association:</strong> retailers schedule promos when they expect demand; week and item effects remove the calendar, not that choice. A holdout is the causal test. <strong>What this means:</strong> pay for visibility, not a deeper silent discount.</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Feature = advertised in the retailer’s circular; display = in-store display; price cut only = a temporary price reduction without either. Mechanisms are mutually exclusive; pairwise comparisons use clustered SEs.</span>
+        <span>Source: EDA §5.5</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide" id="s4">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">Recommendation 03 · Promo economics</div>
+          <h2>A promo trades price for units.</h2>
+        </div>
+        <div class="slide-no">04 / 08</div>
+      </div>
+      <p class="dek">{{PROMO_SHARE}} of store–item–weeks are on promo at a median {{PROMO_DEPTH}} off. A promo week sells <strong class="accent">{{PROMO_UNIT_RATIO}}× the units</strong> for {{PROMO_SPEND_RATIO}}× the money. The gap is the price: {{PROMO_UNIT_RATIO}}× units × {{PRICE_RATIO}}× price ≈ {{PROMO_SPEND_RATIO}}× spend.</p>
+
+      <div class="split split--chart">
+        <div class="figure figure--side">
+          {{FIG_UNIT_SPEND}}
+          <p class="figcap">Median promo week vs the same product–store’s non-promo weeks, {{PROMO_CELLS}} paired cells. Units and spend are medians; the gap is the discount.</p>
+        </div>
+        <div class="stack">
+          <div class="stat">
+            <div class="stat-value accent">{{PROMO_SHARE}}</div>
+            <div class="stat-label">of store–item–weeks are on promo</div>
+            <div class="stat-test">median depth {{PROMO_DEPTH}}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{PROMO_UNIT_RATIO}}×</div>
+            <div class="stat-label">units in a promo week vs own non-promo weeks</div>
+            <div class="stat-test">spend {{PROMO_SPEND_RATIO}}× · {{PROMO_CELLS}} paired cells</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{TPR_SHARE}}</div>
+            <div class="stat-label">of promo weeks are silent price cuts</div>
+            <div class="stat-test">{{MECH_TPR_ROWS}} rows · reach lift only {{MECH_TPR}} [{{MECH_TPR_LO}}, {{MECH_TPR_HI}}]</div>
+          </div>
+          <div class="note"><strong>Promo week economics:</strong> {{PROMO_UNIT_RATIO}}× units and {{PROMO_SPEND_RATIO}}× revenue — a {{PROMO_PRICE_DROP}} lower realized price. That is a volume/revenue result, not a profit claim. Gross profit is accretive only if the base margin is above {{PROMO_GP_BREAKEVEN}}; below that, revenue grows but profit dilutes. <strong>What this means:</strong> get margin and extra costs before deciding.</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Promo weeks are paired against the same cell’s non-promo weeks. Unit and spend ratios are medians across {{PROMO_CELLS}} cells; no cost or margin field. Payback under three crediting rules: {{PB_MEDIAN}}× / {{PB_CELL}}× / {{PB_OBS}}× — not profit.</span>
+        <span>Source: EDA §5.2</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide" id="s5">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">Recommendation 04 · Allocation</div>
+          <h2>Buy reach where it’s cheapest.</h2>
+        </div>
+        <div class="slide-no">05 / 08</div>
+      </div>
+      <p class="dek">For the same discount, bag snacks buy <strong class="accent">{{COST_RATIO}} more extra household-weeks</strong> than frozen pizza. The four category intervals do not overlap.</p>
+
+      <div class="split split--chart">
+        <div class="figure figure--side">
+          {{FIG_COST}}
+          <p class="figcap">Cluster-bootstrap 95% intervals over product–store pairs. Calendar-adjusted: each pair’s non-promo baseline is scaled to the seasonal index of the weeks it actually promoted. Cost = discount per extra household-week.</p>
+        </div>
+        <div class="stack">
+          <div class="stat">
+            <div class="stat-value accent">{{COST_RATIO}}</div>
+            <div class="stat-label">more reach in bag snacks than frozen pizza for the same discount</div>
+            <div class="stat-test">{{COST_BAG}} vs {{COST_PIZZA}} per extra household-week</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">4 / 4</div>
+            <div class="stat-label">category intervals do not overlap</div>
+            <div class="stat-test">{{COST_BAG}} · {{COST_CEREAL}} · {{COST_ORAL}} · {{COST_PIZZA}}</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">{{COST_CONC}}</div>
+            <div class="stat-label">of extra household-weeks come from the top 5% of pairs</div>
+            <div class="stat-test">{{CONC_CELLS}} of {{COST_CELLS}} pairs · {{COST_NEG}} of pairs negative</div>
+          </div>
+          <div class="note"><strong>{{COST}} is a volume-weighted average, not a typical store.</strong> Five percent of pairs supply {{COST_CONC}} of the reach — {{CONC_RATIO}} their share. <strong>What this means:</strong> target high-volume pairs; expect worse than average elsewhere.</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Cost = discount given up ÷ calendar-adjusted extra household-weeks. Cluster bootstrap resamples product–store pairs (2,000 draws), not rows. A cost, not a return: no margin field.</span>
+        <span>Source: EDA §5.5</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide" id="s6">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">Recommendation 05 · Calendar</div>
+          <h2>Seasonality matters. Check the calendar before you test.</h2>
+        </div>
+        <div class="slide-no">06 / 08</div>
+      </div>
+      <p class="dek"><strong>What this means:</strong> the peak is {{SWING_UNITS}} above the trough — compare like weeks or run a year. The reach lift survives: {{REACH}} with week effects vs {{REACH_PAIRED}} paired.</p>
+
+      <div class="split split--chart">
+        <div class="figure figure--side">
+          {{FIG_SEASON}}
+          <p class="figcap">Seasonal component of the weekly log series, phase-averaged over three cycles. Lines show % above or below the fitted trend; the panel starts mid-January.</p>
+        </div>
+        <div class="stack">
+          <div class="stat">
+            <div class="stat-value accent">{{SWING_UNITS}}</div>
+            <div class="stat-label">peak weeks above trough, units</div>
+            <div class="stat-test">{{SWING_SPEND}} for spend</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">p = {{SEASON_P_UNITS}}</div>
+            <div class="stat-label">chance of this pattern if weeks were random</div>
+            <div class="stat-test">{{SEASON_N_UNITS}} of 2,000 shuffles · spend p = {{SEASON_P_SPEND}}</div>
+          </div>
+          <div class="note"><strong>What we measure:</strong> the same item’s promo weeks vs its own non-promo weeks, with week effects removed — an association, not a causal lift. <strong>Why it matters:</strong> seasonality carries {{SEASON_UNITS}} of weekly units variance vs {{TREND_UNITS}} for trend. Repeatability is moderate: {{REPEAT_EXCL}} of {{REPEAT_N}} cohorts, {{REPEAT_BH}} after correction; use the average shape.</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Classical additive decomposition of log1p weekly totals; 52-week centred moving average. Permutation test: reorder the 156 weeks at random 2,000 times; p is the share of shuffles with a pattern at least as strong. Repeat-year: Fisher-z intervals with Benjamini–Hochberg across {{REPEAT_N}} strata.</span>
+        <span>Source: EDA §3–§5.5</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide slide--dense" id="s7">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">Recommendation 06 · Baseline</div>
+          <h2>Don’t underwrite volume growth.</h2>
+        </div>
+        <div class="slide-no">07 / 08</div>
+      </div>
+      <p class="dek">Weekly spend grew <strong class="accent">{{SPEND_GROWTH_PLAIN}} a year</strong> (p = {{SPEND_P_HAC}} HAC, {{SPEND_P_ADJ}} season-adjusted, {{SPEND_P_MK}} Mann–Kendall). Units did not: {{UNITS_GROWTH}} (p = {{UNITS_P_HAC}}, {{UNITS_P_ADJ}}, {{UNITS_P_MK}}).</p>
+
+      <div class="figure">
+        {{FIG_TREND}}
+        <p class="figcap">Weekly totals are indexed to the first week. Faint lines are the raw series, bold lines a 13-week centred average. Only spend gets a fitted line; the units slope is not distinguishable from zero once the 52-week cycle is absorbed. Base case: flat volume, price-led value; 2012 is one week.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value accent">{{SPEND_GROWTH}} / yr</div>
+          <div class="stat-label">weekly spend</div>
+          <div class="stat-test">p = {{SPEND_P_HAC}} HAC(4) · {{SPEND_P_ADJ}} season-adjusted · {{SPEND_P_MK}} Mann–Kendall</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">{{UNITS_GROWTH}} / yr</div>
+          <div class="stat-label">weekly units</div>
+          <div class="stat-test">p = {{UNITS_P_HAC}} · {{UNITS_P_ADJ}} · {{UNITS_P_MK}} — no detectable trend</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">{{BASKET_SPEND_PCT}}</div>
+          <div class="stat-label">spend per basket, 2009 → 2011, paired within store</div>
+          <div class="stat-test">p = {{BASKET_SPEND_P}} · units per basket {{BASKET_UNITS_PCT}} (p = {{BASKET_UNITS_P}})</div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span class="source">Trend tests: OLS with Newey–West HAC(4) (allows for week-to-week correlation), OLS with 51 week-of-year dummies, Mann–Kendall (rank test). All three agree. Basket: paired t-test and Wilcoxon on each store’s 2009 vs 2011 median; n = {{N_STORES}} stores.</span>
+        <span>Source: EDA §2, §5.3</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide slide--dense" id="s8">
+    <div class="slide-inner">
+      <div class="slide-head">
+        <div>
+          <div class="kicker">07 · Diligence</div>
+          <h2>De-risk before you scale.</h2>
+        </div>
+        <div class="slide-no">08 / 08</div>
+      </div>
+      <p class="dek">The panel can measure reach. It cannot prove new customers, profit, or clearance.</p>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-no">01 / HOLDOUT</div>
+          <h3>Test feature + display against a silent price cut.</h3>
+          <p>Promotions are scheduled, not randomized. A holdout or geo test would turn <strong>{{REACH}} reach</strong> into a causal number.</p>
+        </div>
+        <div class="card">
+          <div class="card-no">02 / MARGIN</div>
+          <h3>Get contribution margin and COGS.</h3>
+          <p>No margin field here: a 20%-margin item and a 60%-margin item score the same. Price cuts for clearance need inventory data too.</p>
+        </div>
+        <div class="card">
+          <div class="card-no">03 / CUSTOMER KEY</div>
+          <h3>Link households across weeks.</h3>
+          <p>Without a key, reach cannot be split into new buyers, repeat buyers, and switchers. Reach is not CAC, and there is no LTV.</p>
+        </div>
+      </div>
+
+      <div class="panel-summary">
+        <div>
+          <h3>What the panel is</h3>
+          <p><strong>{{N_ROWS}}</strong> store–product–week records · <strong>{{N_WEEKS}}</strong> weeks · <strong>{{N_STORES}}</strong> stores × <strong>{{N_UPCS}}</strong> products · {{N_CATEGORIES}} categories · {{N_MSAS}} metro areas.</p>
+        </div>
+        <div>
+          <h3>What it cannot say</h3>
+          <p>No customer key. No cost, margin, or inventory field. No randomized promotion assignment.</p>
+        </div>
+      </div>
+
+      <div class="closing"><strong>For reach, visibility. For clearance, price.</strong> This panel can prove the first — test the second.</div>
+      <div class="slide-footer">
+        <span class="source">95% interval = range consistent with the data; p = chance of this result if there were no effect. Methods: HAC(4), season-adjusted OLS, Mann–Kendall; 2,000-shuffle permutation; Fisher-z with Benjamini–Hochberg; cell + week fixed effects with cell-clustered SEs; cluster bootstrap over product–store pairs. Full audit in <span class="mono">notebooks/EDA.ipynb</span>.</span>
+        <span>Prepared October 2026</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+{{DECK_RU}}
+<script>
+(function(){
+  const html = document.documentElement;
+  const decks = {
+    en: document.getElementById('deck-en'),
+    ru: document.getElementById('deck-ru'),
+  };
+  const bar = document.getElementById('bar');
+  const current = document.getElementById('current');
+  const total = document.getElementById('total');
+  const meta = document.querySelector('meta[name="description"]');
+  const buttons = Array.from(document.querySelectorAll('.lang [data-lang]'));
+  const notice = document.getElementById('notice');
+  const titles = {
+    en: html.dataset.titleEn || document.title,
+    ru: html.dataset.titleRu || document.title,
+  };
+  const descriptions = {
+    en: html.dataset.descEn || (meta ? meta.content : ''),
+    ru: html.dataset.descRu || (meta ? meta.content : ''),
+  };
+
+  let lang = 'en';
+  let slides = [];
+  let active = 0;
+  let observer = null;
+  let noticeTimer = null;
+
+  function deckSlides(code){
+    return Array.from(decks[code].querySelectorAll('.slide'));
+  }
+
+  function paint(i){
+    active = Math.max(0, Math.min(slides.length - 1, i));
+    current.textContent = String(active + 1).padStart(2, '0');
+    bar.style.width = ((active + 1) / slides.length * 100) + '%';
+  }
+
+  function observe(){
+    if (!('IntersectionObserver' in window)) return;
+    if (observer) observer.disconnect();
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) paint(slides.indexOf(entry.target));
+      });
+    }, {threshold: 0.55});
+    slides.forEach((slide) => observer.observe(slide));
+  }
+
+  function jumpTo(i){
+    if (!slides[i]) return;
+    const prior = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
+    slides[i].scrollIntoView({block: 'start'});
+    requestAnimationFrame(() => { html.style.scrollBehavior = prior; });
+  }
+
+  function go(step){
+    const next = Math.max(0, Math.min(slides.length - 1, active + step));
+    slides[next].scrollIntoView({behavior: 'smooth', block: 'start'});
+    paint(next);
+  }
+
+  function setLang(code, options){
+    if (!decks[code]) return;
+    const opts = options || {};
+    const index = opts.keepSlide === false ? 0 : active;
+    lang = code;
+    html.lang = code;
+    document.title = titles[code];
+    if (meta) meta.content = descriptions[code];
+    Object.keys(decks).forEach((key) => { decks[key].hidden = key !== code; });
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === code)));
+    slides = deckSlides(code);
+    total.textContent = String(slides.length).padStart(2, '0');
+    observe();
+    paint(index);
+    if (opts.scroll !== false) jumpTo(active);
+    if (code === 'ru' && notice) notice.hidden = true;
+  }
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      setLang(button.dataset.lang);
+      button.blur();
+    });
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.code === 'KeyL' || e.key === 'l' || e.key === 'L'){
+      e.preventDefault();
+      setLang(lang === 'en' ? 'ru' : 'en');
+      return;
+    }
+    if (e.target instanceof Element && e.target.closest('button') && e.key === ' ') return;
+    if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(e.key)){
+      e.preventDefault();
+      go(1);
+    }
+    if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)){
+      e.preventDefault();
+      go(-1);
+    }
+    if (e.key === 'Home'){ e.preventDefault(); go(-active); }
+    if (e.key === 'End'){ e.preventDefault(); go(slides.length - 1 - active); }
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const requested = params.get('lang');
+  const hash = window.location.hash.replace('#', '');
+  // a shared slide link pins the language it was copied from (#s3 = EN, #s3-ru = RU),
+  // but an explicit ?lang= still wins
+  const hashLang = /^s\d+-ru$/.test(hash) ? 'ru' : /^s\d+$/.test(hash) ? 'en' : null;
+  const initial = requested === 'ru' || requested === 'en'
+    ? requested
+    : (hashLang || 'en');
+  setLang(initial, {keepSlide: false, scroll: false});
+
+  if (hash){
+    const target = slides.findIndex((slide) => slide.id === hash);
+    if (target >= 0){ paint(target); jumpTo(target); }
+  }
+
+  // On opening in English, point at the language switch once. The notice is
+  // dismissible, times out on its own, and never reappears after a choice.
+  if (notice){
+    const offers = notice.querySelector('[data-notice-lang]');
+    const close = notice.querySelector('.notice-close');
+    const hide = () => { notice.hidden = true; clearTimeout(noticeTimer); };
+    const show = () => {
+      if (lang !== 'en') return;
+      notice.hidden = false;
+      noticeTimer = setTimeout(hide, 12000);
+    };
+    if (offers){
+      offers.addEventListener('click', () => { hide(); setLang(offers.dataset.noticeLang); });
+    }
+    if (close) close.addEventListener('click', hide);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hide(); });
+    show();
+  }
+})();
+</script>
+</body>
+</html>
